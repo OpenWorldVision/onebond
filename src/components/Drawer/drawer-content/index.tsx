@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Social from "./social";
 import StakeIcon from "../../../assets/icons/stake.svg";
 import BondIcon from "../../../assets/icons/bond.svg";
-import WonderlandIcon from "../../../assets/icons/wonderland-nav-header.svg";
+import WonderlandIcon from "../../../assets/icons/xBlade-logo.png";
 import DashboardIcon from "../../../assets/icons/dashboard.svg";
 import { trim, shorten } from "../../../helpers";
 import { useAddress } from "../../../hooks";
@@ -41,7 +41,7 @@ function NavContent() {
         <div className="dapp-sidebar">
             <div className="branding-header">
                 <Link href="https://wonderland.money" target="_blank">
-                    <img alt="" src={WonderlandIcon} />
+                    <img alt="" className="logo" src={WonderlandIcon} />
                 </Link>
 
                 {address && (
@@ -69,7 +69,7 @@ function NavContent() {
                         </div>
                     </Link>
 
-                    <Link
+                    {/* <Link
                         component={NavLink}
                         to="/stake"
                         isActive={(match: any, location: any) => {
@@ -81,7 +81,7 @@ function NavContent() {
                             <img alt="" src={StakeIcon} />
                             <p>Stake</p>
                         </div>
-                    </Link>
+                    </Link> */}
 
                     <Link
                         component={NavLink}
@@ -94,7 +94,7 @@ function NavContent() {
                     >
                         <div className="dapp-menu-item">
                             <img alt="" src={BondIcon} />
-                            <p>Mint</p>
+                            <p>Bond</p>
                         </div>
                     </Link>
 
@@ -114,7 +114,7 @@ function NavContent() {
                         ))}
                     </div>
 
-                    <Link
+                    {/* <Link
                         component={NavLink}
                         to="/calculator"
                         isActive={(match: any, location: any) => {
@@ -126,16 +126,13 @@ function NavContent() {
                             <img alt="" src={GlobeIcon} />
                             <p>Calculator</p>
                         </div>
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
             <div className="dapp-menu-doc-link">
-                <Link href="https://wonderland.gitbook.io/wonderland/" target="_blank">
+                <Link href="https://wiki.cryptowar.network" target="_blank">
                     <img alt="" src={DocsIcon} />
                     <p>Docs</p>
-                </Link>
-                <Link href="https://legacy.wonderland.money/" target="_blank">
-                    <p>Legacy website</p>
                 </Link>
             </div>
             <Social />
