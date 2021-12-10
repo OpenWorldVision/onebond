@@ -9,7 +9,7 @@ import { Skeleton } from "@material-ui/lab";
 import useTokens, { IAllTokenData } from "../../../../hooks/tokens";
 import { trim } from "../../../../helpers";
 import { IAllBondData } from "../../../../hooks/bonds";
-import { mim, wavax } from "../../../../helpers/bond";
+import { bnb, xbn } from "../../../../helpers/bond";
 import { mim as mimToken, wavax as wavaxToken } from "../../../../helpers/tokens";
 
 interface IChooseTokenProps {
@@ -39,11 +39,11 @@ function ChooseToken({ open, handleClose, handleSelect, bond }: IChooseTokenProp
 
         let lpFilter = true;
 
-        if (bond.name === mim.name) {
+        if (bond.name === bnb.name) {
             lpFilter = mimToken.address !== address;
         }
 
-        if (bond.name === wavax.name) {
+        if (bond.name === xbn.name) {
             lpFilter = isAvax ? false : wavaxToken.address !== address;
         }
 

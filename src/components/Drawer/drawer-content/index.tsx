@@ -99,7 +99,7 @@ function NavContent() {
                     </Link>
 
                     <div className="bond-discounts">
-                        <p>Mint discounts</p>
+                        <p>Discounts</p>
                         {bonds.map((bond, i) => (
                             <Link component={NavLink} to={`/mints/${bond.name}`} key={i} className={"bond"}>
                                 {!bond.bondDiscount ? (
