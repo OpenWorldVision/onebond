@@ -212,7 +212,7 @@ const mai: IToken = {
 
 export const mim: IToken = {
     name: "MIM",
-    address: "0x130966628846BFd36ff31a822705796e8cb8C18D",
+    address: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
     img: MimIcon,
     decimals: 18,
 };

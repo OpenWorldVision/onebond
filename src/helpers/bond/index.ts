@@ -18,8 +18,8 @@ export const bnb = new StableBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x694738E0A438d90487b4a549b201142c1a97B556",
-            reserveAddress: "0x130966628846BFd36ff31a822705796e8cb8C18D",
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "60500000000000000000000000",
@@ -66,8 +66,8 @@ export const xbladeBUSD = new LPBond({
     reserveContractAbi: LpReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0xA184AE1A71EcAD20E822cB965b99c287590c4FFe",
-            reserveAddress: "0x113f413371fc4cc4c9d6416cf1de9dfd7bf747df",
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78b5157aff2b08a4b4cee16f1e8b801515ae529a",
         },
     },
     lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
