@@ -72,8 +72,8 @@ function ViewBase({ children }: IViewBaseProps) {
                     <div className="cubes-bottom">
                         <p>{cubesImage}</p>
                     </div>
-                )}
-                {children} */}
+                )} */}
+                {children}
             </div>
         </div>
     );
