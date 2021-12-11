@@ -2,10 +2,10 @@ import { Networks } from "../../constants/blockchain";
 import { LPBond, CustomLPBond } from "./lp-bond";
 import { StableBond, CustomBond } from "./stable-bond";
 
-import MimIcon from "../../assets/tokens/MIM.svg";
 import AvaxIcon from "../../assets/tokens/AVAX.svg";
 import MimTimeIcon from "../../assets/tokens/TIME-MIM.svg";
 import AvaxTimeIcon from "../../assets/tokens/TIME-AVAX.svg";
+import BnbIcon from "../../assets/tokens/BNB.png";
 
 import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract } from "../../abi";
 
@@ -13,7 +13,7 @@ export const bnb = new StableBond({
     name: "bnb",
     displayName: "BNB",
     bondToken: "BNB",
-    bondIconSvg: MimIcon,
+    bondIconSvg: BnbIcon,
     bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
@@ -50,8 +50,8 @@ export const busd = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0xE02B1AA2c4BE73093BE79d763fdFFC0E3cf67318",
-            reserveAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "756916000000000000000000",

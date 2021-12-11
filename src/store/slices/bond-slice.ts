@@ -116,7 +116,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 9);
 
     let marketPrice = await getMarketPrice(networkID, provider);
-    console.log("/market, ", marketPrice);
     const mimPrice = getTokenPrice("MIM");
     marketPrice = (marketPrice / Math.pow(10, 9)) * mimPrice;
 
