@@ -63,7 +63,7 @@ function ViewBase({ children }: IViewBaseProps) {
                 </Hidden>
             </div>
             <div className={`${classes.content} ${isSmallerScreen && classes.contentShift}`}>
-                {!isSmallerScreen && (
+                {/* {!isSmallerScreen && (
                     <div className="cubes-top">
                         <p>{cubesImage}</p>
                     </div>
@@ -73,7 +73,7 @@ function ViewBase({ children }: IViewBaseProps) {
                         <p>{cubesImage}</p>
                     </div>
                 )}
-                {children}
+                {children} */}
             </div>
         </div>
     );
