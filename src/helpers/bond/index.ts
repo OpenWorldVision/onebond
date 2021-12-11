@@ -50,7 +50,7 @@ export const busd = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            bondAddress: "0x5dbd4de5446ad42e4b1068880fD4a8Bc3B3aaa14",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },

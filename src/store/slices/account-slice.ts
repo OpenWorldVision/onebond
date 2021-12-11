@@ -154,7 +154,7 @@ export const calculateUserBondDetails = createAsyncThunk("account/calculateUserB
     let interestDue, pendingPayout, bondMaturationBlock;
 
     const bondDetails = await bondContract.bondInfo(address);
-    interestDue = bondDetails.payout / Math.pow(10, 9);
+    interestDue = bondDetails.payout / Math.pow(10, 18);
     bondMaturationBlock = Number(bondDetails.vesting) + Number(bondDetails.lastTime);
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
@@ -168,7 +168,7 @@ export const calculateUserBondDetails = createAsyncThunk("account/calculateUserB
     const avaxBalance = await provider.getSigner().getBalance();
     const avaxVal = ethers.utils.formatEther(avaxBalance);
 
-    const pendingPayoutVal = ethers.utils.formatUnits(pendingPayout, "gwei");
+    const pendingPayoutVal = ethers.utils.formatEther(pendingPayout);
 
     return {
         bond: bond.name,

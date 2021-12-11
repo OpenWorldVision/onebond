@@ -2,8 +2,11 @@
 pragma solidity 0.7.5;
 
 import "./interfaces/IPancakeRouter02.sol";
+import "./libraries/SafeMath.sol";
 
 contract PancakeAggregator {
+    using SafeMath for uint256;
+
     IPancakeRouter02 public pancakeRouter;
     address public token;
     address public BUSDAddress;
@@ -21,13 +24,13 @@ contract PancakeAggregator {
         BUSDAddress = _busdAddress;
     }
 
-    function latestRoundData() external view returns (int256) {
+    function latestRoundData() external view returns (uint256) {
         // generate the pancake pair path of xblade -> weth -> usd
         address[] memory path = new address[](3);
         path[0] = token;
         path[1] = pancakeRouter.WETH();
         path[2] = BUSDAddress;
 
-        return int256(pancakeRouter.getAmountsOut(1e18, path)[2]);
+        return pancakeRouter.getAmountsOut(1e18, path)[2];
     }
 }

@@ -110,14 +110,12 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     const bondContract = bond.getContractForBond(networkID, provider);
     const bondCalcContract = getBondCalculator(networkID, provider);
 
-    // FIXME: Just ignore for testing
-    // const terms = await bondContract.terms();
-    const terms = { vestingTerm: 0 };
-    const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 9);
+    const terms = await bondContract.terms();
+    const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 18);
 
     let marketPrice = await getMarketPrice(networkID, provider);
-    const mimPrice = getTokenPrice("MIM");
-    marketPrice = (marketPrice / Math.pow(10, 9)) * mimPrice;
+    const usdPrice = getTokenPrice("BUSD");
+    marketPrice = (1 / marketPrice) * usdPrice;
 
     try {
         bondPrice = await bondContract.bondPriceInUSD();
@@ -182,7 +180,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
             purchased = purchased * avaxPrice;
         }
     }
-
+    console.log({ bondPrice });
     return {
         bond: bond.name,
         bondDiscount,

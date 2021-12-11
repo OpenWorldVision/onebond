@@ -10,7 +10,7 @@ module.exports = async function (deployer, network) {
         router = "0x9ac64cc6e4415144c455bd8e4837fea55603e5c3"; // Pancake Router
         token = "0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B"; // xBlade (receive token)
         busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
-        pancakeAggregator = "0x723E3CCc778C48DFED46182b290b2f605eBC1889";
+        pancakeAggregator = "0x5bff64D782D7A4977a4435453d3A538983F34Ae6";
         BUSD = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
     }
 
@@ -27,10 +27,10 @@ module.exports = async function (deployer, network) {
         pancakeAggregator, // Price feed from Pancake
     );
     const xBladeBond = await TimeBondDepository.deployed();
-    const controlVariable = 1;
-    const minimumTerm = "432000"; // 5 days
-    const minimumPrice = "50000000000000000"; // 0.05 USD
-    const maxPayout = 900; // 0.9%
+    const controlVariable = 257;
+    const minimumTerm = "604800"; // 5 days
+    const minimumPrice = "0"; // 0.05 USD
+    const maxPayout = 28; // 0.9%
     const initialDebt = 0;
     const maxDebt = "1000000000000000000000000"; // Max 1.000.000 xBlade
 

@@ -107,7 +107,7 @@ interface AggregatorV3Interface {
             uint80 answeredInRound
         );
 
-    function latestRoundData() external view returns (int256 answer);
+    function latestRoundData() external view returns (uint256 answer);
 }
 
 interface ITreasury {
@@ -505,8 +505,8 @@ contract TimeBondDepository is Ownable {
     /**
      *  @notice get asset price from chainlink
      */
-    function assetPrice() public view returns (int256) {
-        int256 price = priceFeed.latestRoundData();
+    function assetPrice() public view returns (uint256) {
+        uint256 price = priceFeed.latestRoundData();
         return price;
     }
 
@@ -515,7 +515,7 @@ contract TimeBondDepository is Ownable {
      *  @return price_ uint
      */
     function bondPriceInUSD() public view returns (uint256 price_) {
-        price_ = bondPrice().mul(uint256(assetPrice())).mul(1e6);
+        price_ = bondPrice().mul(assetPrice()).mul(1e12).div(1e18);
     }
 
     /**
@@ -532,7 +532,7 @@ contract TimeBondDepository is Ownable {
      *  @return uint
      */
     function standardizedDebtRatio() external view returns (uint256) {
-        return debtRatio().mul(uint256(assetPrice())).div(1e8); // ETH feed is 8 decimals
+        return debtRatio().mul(assetPrice()).div(1e8); // ETH feed is 8 decimals
     }
 
     /**
