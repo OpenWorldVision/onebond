@@ -111,15 +111,15 @@ function App() {
                     <Dashboard />
                 </Route> */}
 
-                <Route exact path="/">
+                {/* <Route exact path="/">
                     <Redirect to="/stake" />
-                </Route>
+                </Route> */}
 
-                <Route path="/stake">
+                {/* <Route path="/stake">
                     <Stake />
-                </Route>
+                </Route> */}
 
-                <Route path="/mints">
+                <Route path="/">
                     {bonds.map(bond => {
                         return (
                             <Route exact key={bond.name} path={`/mints/${bond.name}`}>
@@ -130,9 +130,9 @@ function App() {
                     <ChooseBond />
                 </Route>
 
-                <Route path="/calculator">
+                {/* <Route path="/calculator">
                     <Calculator />
-                </Route>
+                </Route> */}
 
                 <Route component={NotFound} />
             </Switch>

@@ -1,4 +1,4 @@
-import TimeImg from "../assets/tokens/TIME.svg";
+import XbladeImg from "../assets/tokens/XBLADE.png";
 import MemoImg from "../assets/tokens/MEMO.png";
 
 function toUrl(tokenPath: string): string {
@@ -7,8 +7,8 @@ function toUrl(tokenPath: string): string {
 }
 
 export function getTokenUrl(name: string) {
-    if (name === "time") {
-        return toUrl(TimeImg);
+    if (name === "xblade") {
+        return toUrl(XbladeImg);
     }
 
     if (name === "memo") {
