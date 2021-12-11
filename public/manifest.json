@@ -1,8 +1,8 @@
 {
-  "short_name": "Wonderland",
+  "short_name": "Cryptowar",
   "start_url": ".",
   "homepage": "./",
-  "name": "Wonderland",
+  "name": "Cryptowar",
   "launch_path": "/public/index.html",
   "icons": [
     {

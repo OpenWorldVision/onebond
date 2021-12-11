@@ -10,7 +10,7 @@ function Main() {
                 <img src={CatImg} alt="" />
             </div>
             <div className="landing-main-btns-wrap">
-                <Link href="https://app.wonderland.money" target="_blank" rel="noreferrer">
+                <Link href="https://bond.cryptowar.network" target="_blank" rel="noreferrer">
                     <div className="landing-main-btn">
                         <p>Enter App</p>
                     </div>
@@ -23,7 +23,7 @@ function Main() {
             </div>
             <div className="landing-main-title-wrap">
                 <p>The Defi</p>
-                <p>WonderLand</p>
+                <p>Cryptowar</p>
             </div>
             <div className="landing-main-help-text-wrap">
                 <p>Financial tools to grow your wealth - stake</p>
