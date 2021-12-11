@@ -55,7 +55,7 @@ function NavContent() {
 
             <div className="dapp-menu-links">
                 <div className="dapp-nav">
-                    <Link
+                    {/* <Link
                         component={NavLink}
                         to="/dashboard"
                         isActive={(match: any, location: any) => {
@@ -67,7 +67,7 @@ function NavContent() {
                             <img alt="" src={DashboardIcon} />
                             <p>Dashboard</p>
                         </div>
-                    </Link>
+                    </Link> */}
 
                     {/* <Link
                         component={NavLink}
@@ -94,7 +94,7 @@ function NavContent() {
                     >
                         <div className="dapp-menu-item">
                             <img alt="" src={BondIcon} />
-                            <p>Bond</p>
+                            <p>XBLADE Bond</p>
                         </div>
                     </Link>
 
