@@ -32,7 +32,7 @@ function ChooseBond() {
                     <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
                         <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">Treasury Balance</p>
+                                <p className="choose-bond-view-card-metrics-title">Available To Mint</p>
                                 <p className="choose-bond-view-card-metrics-value">
                                     {isAppLoading ? (
                                         <Skeleton width="180px" />
