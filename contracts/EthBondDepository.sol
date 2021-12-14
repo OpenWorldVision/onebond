@@ -151,16 +151,12 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     event ControlVariableAdjustment(uint256 initialBCV, uint256 newBCV, uint256 adjustment, bool addition);
 
     /* ======== STATE VARIABLES ======== */
-    address public OHM; // token given as payment for bond
+    address public xBlade; // token given as payment for bond
     address public principle; // token used to create bond
-    // address public  treasury; // mints OHM when receives principle
+    address public treasury; // mints xBlade when receives principle
     address public DAO; // receives profit share from bond
 
     AggregatorV3Interface internal priceFeed;
-
-    address public staking; // to auto-stake payout
-    address public stakingHelper; // to stake and claim if no staking warmup
-    bool public useHelper;
 
     Terms public terms; // stores terms for new bonds
     Adjust public adjustment; // stores adjustment to BCV data
@@ -185,7 +181,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     // Info for bond holder
     struct Bond {
-        uint256 payout; // OHM remaining to be paid
+        uint256 payout; // xBlade remaining to be paid
         uint256 pricePaid; // In DAI, for front end viewing
         uint32 vesting; // Seconds left to vest
         uint32 lastTime; // Last interaction
@@ -203,7 +199,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     /* ======== INITIALIZATION ======== */
 
     function initialize(
-        address _OHM,
+        address _xBlade,
         address _principle,
         // address _treasury,
         address _DAO,
@@ -211,8 +207,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address _router
     ) public initializer {
         OwnableUpgradeable.__Ownable_init();
-        require(_OHM != address(0));
-        OHM = _OHM;
+        require(_xBlade != address(0));
+        xBlade = _xBlade;
         require(_principle != address(0));
         principle = _principle;
         // require(_treasury != address(0));
@@ -297,22 +293,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         adjustment = Adjust({ add: _addition, rate: _increment, target: _target, buffer: _buffer, lastTime: uint32(block.timestamp) });
     }
 
-    /**
-     *  @notice set contract for auto stake
-     *  @param _staking address
-     *  @param _helper bool
-     */
-    function setStaking(address _staking, bool _helper) external onlyOwner {
-        require(_staking != address(0));
-        if (_helper) {
-            useHelper = true;
-            stakingHelper = _staking;
-        } else {
-            useHelper = false;
-            staking = _staking;
-        }
-    }
-
     /* ======== USER FUNCTIONS ======== */
 
     /**
@@ -340,7 +320,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 value = _amount;
         uint256 payout = payoutFor(value); // payout to bonder is computed
 
-        require(payout >= 10000000, "Bond too small"); // must be > 0.01 OHM ( underflow protection )
+        require(payout >= 10000000, "Bond too small"); // must be > 0.01 xBlade ( underflow protection )
         require(payout <= maxPayout(), "Bond too large"); // size protection because there is no slippage
 
         /**
@@ -418,20 +398,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return uint
      */
     function stakeOrSend(address _recipient, uint256 _amount) internal returns (uint256) {
-        // if (!_stake) {
-        // if user does not want to stake
-        IERC20(OHM).transfer(_recipient, _amount); // send payout
-        // } else {
-        //     // if user wants to stake
-        //     if (useHelper) {
-        //         // use if staking warmup is 0
-        //         IERC20(OHM).approve(stakingHelper, _amount);
-        //         IStakingHelper(stakingHelper).stake(_amount, _recipient);
-        //     } else {
-        //         IERC20(OHM).approve(staking, _amount);
-        //         IStaking(staking).stake(_amount, _recipient);
-        //     }
-        // }
+        IERC20(xBlade).transfer(_recipient, _amount); // send payout
         return _amount;
     }
 
@@ -478,17 +445,17 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     function swap(uint256 _value) public payable {
         if (_value > 0) {
-            if (IERC20(OHM).allowance(address(this), address(pancakeRouter)) == 0) {
-                IERC20(OHM).approve(address(pancakeRouter), ~uint256(0));
+            if (IERC20(xBlade).allowance(address(this), address(pancakeRouter)) == 0) {
+                IERC20(xBlade).approve(address(pancakeRouter), ~uint256(0));
             }
-            uint256 oldBalance = IERC20(OHM).balanceOf(address(this));
+            uint256 oldBalance = IERC20(xBlade).balanceOf(address(this));
             // generate the pancake pair path of token -> weth
             address[] memory path = new address[](2);
             path[0] = pancakeRouter.WETH();
-            path[1] = OHM;
+            path[1] = xBlade;
             pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, address(this), block.timestamp + 360);
             uint256 newBalance = IERC20(principle).balanceOf(address(this));
-            pancakeRouter.addLiquidity(OHM, principle, newBalance.sub(oldBalance), _value, 0, 0, address(this), block.timestamp + 360);
+            pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value, 0, 0, address(this), block.timestamp + 360);
         }
     }
 
@@ -499,7 +466,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return uint
      */
     function maxPayout() public view returns (uint256) {
-        return IERC20(OHM).totalSupply().mul(terms.maxPayout).div(100000);
+        return IERC20(xBlade).totalSupply().mul(terms.maxPayout).div(100000);
     }
 
     /**
@@ -552,11 +519,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     }
 
     /**
-     *  @notice calculate current ratio of debt to OHM supply
+     *  @notice calculate current ratio of debt to xBlade supply
      *  @return debtRatio_ uint
      */
     function debtRatio() public view returns (uint256 debtRatio_) {
-        uint256 supply = IERC20(OHM).totalSupply();
+        uint256 supply = IERC20(xBlade).totalSupply();
         debtRatio_ = FixedPoint.fraction(currentDebt().mul(1e9), supply).decode112with18().div(1e18);
     }
 
@@ -606,7 +573,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     }
 
     /**
-     *  @notice calculate amount of OHM available for claim by depositor
+     *  @notice calculate amount of xBlade available for claim by depositor
      *  @param _depositor address
      *  @return pendingPayout_ uint
      */
@@ -624,11 +591,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     /* ======= AUXILLIARY ======= */
 
     /**
-     *  @notice allow anyone to send lost tokens (excluding principle or OHM) to the DAO
+     *  @notice allow anyone to send lost tokens (excluding principle or xBlade) to the DAO
      *  @return bool
      */
     function recoverLostToken(address _token) external returns (bool) {
-        require(_token != OHM);
+        require(_token != xBlade);
         require(_token != principle);
         IERC20(_token).safeTransfer(DAO, IERC20(_token).balanceOf(address(this)));
         return true;
