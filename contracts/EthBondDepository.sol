@@ -4,8 +4,10 @@ pragma solidity 0.7.5;
 import "./libraries/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./Ownable.sol";
 import "./libraries/FixedPoint.sol";
+import "./interfaces/IPancakeRouter02.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 library SafeERC20 {
     using SafeMath for uint256;
@@ -135,7 +137,7 @@ interface IWETH9 is IERC20 {
     function deposit() external payable;
 }
 
-contract TimeBondDepository is Ownable {
+contract TimeBondDepository is Initializable, OwnableUpgradeable {
     using FixedPoint for *;
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
@@ -149,10 +151,10 @@ contract TimeBondDepository is Ownable {
     event ControlVariableAdjustment(uint256 initialBCV, uint256 newBCV, uint256 adjustment, bool addition);
 
     /* ======== STATE VARIABLES ======== */
-    address public immutable OHM; // token given as payment for bond
-    address public immutable principle; // token used to create bond
-    // address public immutable treasury; // mints OHM when receives principle
-    address public immutable DAO; // receives profit share from bond
+    address public OHM; // token given as payment for bond
+    address public principle; // token used to create bond
+    // address public  treasury; // mints OHM when receives principle
+    address public DAO; // receives profit share from bond
 
     AggregatorV3Interface internal priceFeed;
 
@@ -167,6 +169,8 @@ contract TimeBondDepository is Ownable {
 
     uint256 public totalDebt; // total value of outstanding bonds; used for pricing
     uint32 public lastDecay; // reference block for debt decay
+
+    IPancakeRouter02 public pancakeRouter;
 
     /* ======== STRUCTS ======== */
 
@@ -198,13 +202,15 @@ contract TimeBondDepository is Ownable {
 
     /* ======== INITIALIZATION ======== */
 
-    constructor(
+    function initialize(
         address _OHM,
         address _principle,
         // address _treasury,
         address _DAO,
-        address _feed
-    ) {
+        address _feed,
+        address _router
+    ) public initializer {
+        OwnableUpgradeable.__Ownable_init();
         require(_OHM != address(0));
         OHM = _OHM;
         require(_principle != address(0));
@@ -215,6 +221,7 @@ contract TimeBondDepository is Ownable {
         DAO = _DAO;
         require(_feed != address(0));
         priceFeed = AggregatorV3Interface(_feed);
+        pancakeRouter = IPancakeRouter02(_router);
     }
 
     /**
@@ -233,7 +240,7 @@ contract TimeBondDepository is Ownable {
         uint256 _maxDebt,
         uint256 _initialDebt,
         uint32 _vestingTerm
-    ) external onlyPolicy {
+    ) external onlyOwner {
         require(currentDebt() == 0, "Debt must be 0 for initialization");
         terms = Terms({ controlVariable: _controlVariable, vestingTerm: _vestingTerm, minimumPrice: _minimumPrice, maxPayout: _maxPayout, maxDebt: _maxDebt });
         totalDebt = _initialDebt;
@@ -254,7 +261,7 @@ contract TimeBondDepository is Ownable {
      *  @param _parameter PARAMETER
      *  @param _input uint
      */
-    function setBondTerms(PARAMETER _parameter, uint256 _input) external onlyPolicy {
+    function setBondTerms(PARAMETER _parameter, uint256 _input) external onlyOwner {
         if (_parameter == PARAMETER.VESTING) {
             // 0
             require(_input >= 129600, "Vesting must be longer than 36 hours");
@@ -284,7 +291,7 @@ contract TimeBondDepository is Ownable {
         uint256 _increment,
         uint256 _target,
         uint32 _buffer
-    ) external onlyPolicy {
+    ) external onlyOwner {
         require(_increment <= terms.controlVariable.mul(25).div(1000), "Increment too large");
 
         adjustment = Adjust({ add: _addition, rate: _increment, target: _target, buffer: _buffer, lastTime: uint32(block.timestamp) });
@@ -295,7 +302,7 @@ contract TimeBondDepository is Ownable {
      *  @param _staking address
      *  @param _helper bool
      */
-    function setStaking(address _staking, bool _helper) external onlyPolicy {
+    function setStaking(address _staking, bool _helper) external onlyOwner {
         require(_staking != address(0));
         if (_helper) {
             useHelper = true;
@@ -457,6 +464,32 @@ contract TimeBondDepository is Ownable {
     function decayDebt() internal {
         totalDebt = totalDebt.sub(debtDecay());
         lastDecay = uint32(block.timestamp);
+    }
+
+    /**
+     * @notice increase liquidity
+     */
+    function liquidify(uint256 _value) internal {
+        uint256 _treasuryPercent = 170;
+        uint256 _buyAndLiquidifyPercent = 415;
+        IERC20(principle).safeTransferFrom(msg.sender, address(this), _value.mul(_treasuryPercent).div(1000));
+        swap(_value.mul(_buyAndLiquidifyPercent).div(1000));
+    }
+
+    function swap(uint256 _value) public payable {
+        if (_value > 0) {
+            if (IERC20(OHM).allowance(address(this), address(pancakeRouter)) == 0) {
+                IERC20(OHM).approve(address(pancakeRouter), ~uint256(0));
+            }
+            uint256 oldBalance = IERC20(OHM).balanceOf(address(this));
+            // generate the pancake pair path of token -> weth
+            address[] memory path = new address[](2);
+            path[0] = pancakeRouter.WETH();
+            path[1] = OHM;
+            pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, address(this), block.timestamp + 360);
+            uint256 newBalance = IERC20(principle).balanceOf(address(this));
+            pancakeRouter.addLiquidity(OHM, principle, newBalance.sub(oldBalance), _value, 0, 0, address(this), block.timestamp + 360);
+        }
     }
 
     /* ======== VIEW FUNCTIONS ======== */
