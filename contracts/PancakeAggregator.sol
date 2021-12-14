@@ -2,7 +2,7 @@
 pragma solidity 0.7.5;
 
 import "./interfaces/IPancakeRouter02.sol";
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract PancakeAggregator {
     using SafeMath for uint256;

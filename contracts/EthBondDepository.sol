@@ -1,114 +1,16 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.7.5;
 
-import "./libraries/SafeMath.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
+// import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./libraries/FixedPoint.sol";
-import "./interfaces/IPancakeRouter02.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-
-library SafeERC20 {
-    using SafeMath for uint256;
-    using Address for address;
-
-    function safeTransfer(
-        IERC20 token,
-        address to,
-        uint256 value
-    ) internal {
-        _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
-    }
-
-    function safeTransferFrom(
-        IERC20 token,
-        address from,
-        address to,
-        uint256 value
-    ) internal {
-        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
-    }
-
-    /**
-     * @dev Deprecated. This function has issues similar to the ones found in
-     * {IERC20-approve}, and its usage is discouraged.
-     *
-     * Whenever possible, use {safeIncreaseAllowance} and
-     * {safeDecreaseAllowance} instead.
-     */
-    function safeApprove(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
-        // safeApprove should only be called when setting an initial allowance,
-        // or when resetting it to zero. To increase and decrease it, use
-        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
-        // solhint-disable-next-line max-line-length
-        require((value == 0) || (token.allowance(address(this), spender) == 0), "SafeERC20: approve from non-zero to non-zero allowance");
-        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
-    }
-
-    function safeIncreaseAllowance(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
-        uint256 newAllowance = token.allowance(address(this), spender).add(value);
-        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
-    }
-
-    function safeDecreaseAllowance(
-        IERC20 token,
-        address spender,
-        uint256 value
-    ) internal {
-        uint256 newAllowance = token.allowance(address(this), spender).sub(value, "SafeERC20: decreased allowance below zero");
-        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
-    }
-
-    /**
-     * @dev Imitates a Solidity high-level call (i.e. a regular function call to a contract), relaxing the requirement
-     * on the return value: the return value is optional (but if data is returned, it must not be false).
-     * @param token The token targeted by the call.
-     * @param data The call data (encoded using abi.encode or one of its variants).
-     */
-    function _callOptionalReturn(IERC20 token, bytes memory data) private {
-        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since
-        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that
-        // the target address contains contract code and also asserts for success in the low-level call.
-
-        bytes memory returndata = address(token).functionCall(data, "SafeERC20: low-level call failed");
-        if (returndata.length > 0) {
-            // Return data is optional
-            // solhint-disable-next-line max-line-length
-            require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
-        }
-    }
-}
+import "./libraries/FixedPoint.sol";
+import "./interfaces/IPancakeRouter02.sol";
+import "./libraries/SafeMath32.sol";
 
 interface AggregatorV3Interface {
-    function decimals() external view returns (uint8);
-
-    function description() external view returns (string memory);
-
-    function version() external view returns (uint256);
-
-    // getRoundData and latestRoundData should both raise "No data present"
-    // if they do not have data to report, instead of returning unset values
-    // which could be misinterpreted as actual reported values.
-    function getRoundData(uint80 _roundId)
-        external
-        view
-        returns (
-            uint80 roundId,
-            int256 answer,
-            uint256 startedAt,
-            uint256 updatedAt,
-            uint80 answeredInRound
-        );
-
     function latestRoundData() external view returns (uint256 answer);
 }
 
@@ -141,14 +43,13 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     using FixedPoint for *;
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
-    using SafeMath for uint32;
+    using SafeMath32 for uint32;
 
     /* ======== EVENTS ======== */
 
     event BondCreated(uint256 deposit, uint256 indexed payout, uint256 indexed expires, uint256 indexed priceInUSD);
     event BondRedeemed(address indexed recipient, uint256 payout, uint256 remaining);
     event BondPriceChanged(uint256 indexed priceInUSD, uint256 indexed internalPrice, uint256 indexed debtRatio);
-    event ControlVariableAdjustment(uint256 initialBCV, uint256 newBCV, uint256 adjustment, bool addition);
 
     /* ======== STATE VARIABLES ======== */
     address public xBlade; // token given as payment for bond
@@ -159,7 +60,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     AggregatorV3Interface internal priceFeed;
 
     Terms public terms; // stores terms for new bonds
-    Adjust public adjustment; // stores adjustment to BCV data
 
     mapping(address => Bond) public bondInfo; // stores bond information for depositors
 
@@ -167,16 +67,15 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint32 public lastDecay; // reference block for debt decay
 
     IPancakeRouter02 public pancakeRouter;
-
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
     struct Terms {
-        uint256 controlVariable; // scaling variable for price
         uint256 minimumPrice; // vs principle value. 4 decimals (1500 = 0.15)
         uint256 maxPayout; // in thousandths of a %. i.e. 500 = 0.5%
         uint256 maxDebt; // 9 decimal debt ratio, max % total supply created as debt
         uint32 vestingTerm; // in seconds
+        uint256 discountRate; // in percent
     }
 
     // Info for bond holder
@@ -185,15 +84,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 pricePaid; // In DAI, for front end viewing
         uint32 vesting; // Seconds left to vest
         uint32 lastTime; // Last interaction
-    }
-
-    // Info for incremental adjustments to control variable
-    struct Adjust {
-        bool add; // addition or subtraction
-        uint256 rate; // increment
-        uint256 target; // BCV when adjustment finished
-        uint32 buffer; // minimum length (in seconds) between adjustments
-        uint32 lastTime; // block when last adjustment made
     }
 
     /* ======== INITIALIZATION ======== */
@@ -222,23 +112,23 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     /**
      *  @notice initializes bond parameters
-     *  @param _controlVariable uint
      *  @param _vestingTerm uint
      *  @param _minimumPrice uint
      *  @param _maxPayout uint
      *  @param _maxDebt uint
      *  @param _initialDebt uint
+     *  @param _discountRate uint
      */
     function initializeBondTerms(
-        uint256 _controlVariable,
         uint256 _minimumPrice,
         uint256 _maxPayout,
         uint256 _maxDebt,
         uint256 _initialDebt,
-        uint32 _vestingTerm
+        uint32 _vestingTerm,
+        uint256 _discountRate
     ) external onlyOwner {
         require(currentDebt() == 0, "Debt must be 0 for initialization");
-        terms = Terms({ controlVariable: _controlVariable, vestingTerm: _vestingTerm, minimumPrice: _minimumPrice, maxPayout: _maxPayout, maxDebt: _maxDebt });
+        terms = Terms({ vestingTerm: _vestingTerm, minimumPrice: _minimumPrice, maxPayout: _maxPayout, maxDebt: _maxDebt, discountRate: _discountRate });
         totalDebt = _initialDebt;
         lastDecay = uint32(block.timestamp);
     }
@@ -249,7 +139,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         VESTING,
         PAYOUT,
         DEBT,
-        MINPRICE
+        MINPRICE,
+        DISCOUNT
     }
 
     /**
@@ -272,25 +163,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         } else if (_parameter == PARAMETER.MINPRICE) {
             // 3
             terms.minimumPrice = _input;
+        } else if (_parameter == PARAMETER.DISCOUNT) {
+            // 4
+            require(_input < 300, "Discount sale cannot greater than 30%");
+            terms.discountRate = _input;
         }
-    }
-
-    /**
-     *  @notice set control variable adjustment
-     *  @param _addition bool
-     *  @param _increment uint
-     *  @param _target uint
-     *  @param _buffer uint
-     */
-    function setAdjustment(
-        bool _addition,
-        uint256 _increment,
-        uint256 _target,
-        uint32 _buffer
-    ) external onlyOwner {
-        require(_increment <= terms.controlVariable.mul(25).div(1000), "Increment too large");
-
-        adjustment = Adjust({ add: _addition, rate: _increment, target: _target, buffer: _buffer, lastTime: uint32(block.timestamp) });
     }
 
     /* ======== USER FUNCTIONS ======== */
@@ -351,8 +228,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         // indexed events are emitted
         emit BondCreated(_amount, payout, block.timestamp.add(terms.vestingTerm), priceInUSD);
         emit BondPriceChanged(bondPriceInUSD(), _bondPrice(), debtRatio());
-
-        adjust(); // control variable is adjusted
         refundETH(); //refund user if needed
         return payout;
     }
@@ -400,29 +275,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function stakeOrSend(address _recipient, uint256 _amount) internal returns (uint256) {
         IERC20(xBlade).transfer(_recipient, _amount); // send payout
         return _amount;
-    }
-
-    /**
-     *  @notice makes incremental adjustment to control variable
-     */
-    function adjust() internal {
-        uint256 timeCanAdjust = adjustment.lastTime.add(adjustment.buffer);
-        if (adjustment.rate != 0 && block.timestamp >= timeCanAdjust) {
-            uint256 initial = terms.controlVariable;
-            if (adjustment.add) {
-                terms.controlVariable = terms.controlVariable.add(adjustment.rate);
-                if (terms.controlVariable >= adjustment.target) {
-                    adjustment.rate = 0;
-                }
-            } else {
-                terms.controlVariable = terms.controlVariable.sub(adjustment.rate);
-                if (terms.controlVariable <= adjustment.target) {
-                    adjustment.rate = 0;
-                }
-            }
-            adjustment.lastTime = uint32(block.timestamp);
-            emit ControlVariableAdjustment(initial, terms.controlVariable, adjustment.rate, adjustment.add);
-        }
     }
 
     /**
@@ -483,7 +335,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return price_ uint
      */
     function bondPrice() public view returns (uint256 price_) {
-        price_ = terms.controlVariable.mul(debtRatio()).div(1e5);
+        price_ = assetPrice().mul(terms.discountRate).div(1000);
         if (price_ < terms.minimumPrice) {
             price_ = terms.minimumPrice;
         }
@@ -493,13 +345,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @notice calculate current bond price and remove floor if above
      *  @return price_ uint
      */
-    function _bondPrice() internal returns (uint256 price_) {
-        price_ = terms.controlVariable.mul(debtRatio()).div(1e5);
-        if (price_ < terms.minimumPrice) {
-            price_ = terms.minimumPrice;
-        } else if (terms.minimumPrice != 0) {
-            terms.minimumPrice = 0;
-        }
+    function _bondPrice() internal view returns (uint256 price_) {
+        price_ = bondPrice();
     }
 
     /**
@@ -525,14 +372,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function debtRatio() public view returns (uint256 debtRatio_) {
         uint256 supply = IERC20(xBlade).totalSupply();
         debtRatio_ = FixedPoint.fraction(currentDebt().mul(1e9), supply).decode112with18().div(1e18);
-    }
-
-    /**
-     *  @notice debt ratio in same terms as reserve bonds
-     *  @return uint
-     */
-    function standardizedDebtRatio() external view returns (uint256) {
-        return debtRatio().mul(assetPrice()).div(1e8); // ETH feed is 8 decimals
     }
 
     /**
@@ -562,7 +401,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      */
     function percentVestedFor(address _depositor) public view returns (uint256 percentVested_) {
         Bond memory bond = bondInfo[_depositor];
-        uint256 secondsSinceLast = uint32(block.timestamp).sub(bond.lastTime);
+        uint256 secondsSinceLast = uint32(block.timestamp).sub32(bond.lastTime);
         uint256 vesting = bond.vesting;
 
         if (vesting > 0) {
