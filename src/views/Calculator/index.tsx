@@ -21,7 +21,7 @@ function Calculator() {
 
     const trimmedStakingAPY = trim(stakingAPY * 100, 1);
     const trimmedMemoBalance = trim(Number(memoBalance), 6);
-    const trimeMarketPrice = trim(marketPrice, 2);
+    const trimeMarketPrice = trim(marketPrice, 4);
 
     const [memoAmount, setMemoAmount] = useState(trimmedMemoBalance);
     const [rewardYield, setRewardYield] = useState(trimmedStakingAPY);

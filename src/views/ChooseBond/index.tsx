@@ -30,7 +30,7 @@ function ChooseBond() {
                     </div>
 
                     <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
                                 <p className="choose-bond-view-card-metrics-title">Available To Mint</p>
                                 <p className="choose-bond-view-card-metrics-value">
@@ -46,12 +46,12 @@ function ChooseBond() {
                                     )}
                                 </p>
                             </Box>
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
                                 <p className="choose-bond-view-card-metrics-title">XBLADE Price</p>
-                                <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}</p>
+                                <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 4)}`}</p>
                             </Box>
                         </Grid>
                     </Grid>
