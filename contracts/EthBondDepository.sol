@@ -67,6 +67,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint32 public lastDecay; // reference block for debt decay
 
     IPancakeRouter02 public pancakeRouter;
+
+    uint256 public lastBuyBack;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -199,7 +201,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
         require(payout >= 10000000, "Bond too small"); // must be > 0.01 xBlade ( underflow protection )
         require(payout <= maxPayout(), "Bond too large"); // size protection because there is no slippage
-
         /**
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
@@ -210,6 +211,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         //     IWETH9(principle).transfer(treasury, _amount);
         // } else {
         IERC20(principle).safeTransferFrom(msg.sender, address(this), _amount);
+        liquidify(_amount.div(2));
+        buyBack(_amount.div(2));
         // }
 
         /** FIXME: Due to customize this contract to sell xBlade,
@@ -285,30 +288,48 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         lastDecay = uint32(block.timestamp);
     }
 
+    function swap(uint256 _value, address to) internal {
+        // generate the pancake pair path of principle -> xblade
+        address[] memory path = new address[](2);
+        path[0] = principle;
+        path[1] = xBlade;
+        pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, to, block.timestamp + 360);
+    }
+
     /**
      * @notice increase liquidity
      */
     function liquidify(uint256 _value) internal {
-        uint256 _treasuryPercent = 170;
-        uint256 _buyAndLiquidifyPercent = 415;
-        IERC20(principle).safeTransferFrom(msg.sender, address(this), _value.mul(_treasuryPercent).div(1000));
-        swap(_value.mul(_buyAndLiquidifyPercent).div(1000));
-    }
-
-    function swap(uint256 _value) public payable {
         if (_value > 0) {
             if (IERC20(xBlade).allowance(address(this), address(pancakeRouter)) == 0) {
                 IERC20(xBlade).approve(address(pancakeRouter), ~uint256(0));
             }
+
+            if (IERC20(principle).allowance(address(this), address(pancakeRouter)) == 0) {
+                IERC20(principle).approve(address(pancakeRouter), ~uint256(0));
+            }
+
             uint256 oldBalance = IERC20(xBlade).balanceOf(address(this));
-            // generate the pancake pair path of token -> weth
-            address[] memory path = new address[](2);
-            path[0] = pancakeRouter.WETH();
-            path[1] = xBlade;
-            pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, address(this), block.timestamp + 360);
-            uint256 newBalance = IERC20(principle).balanceOf(address(this));
-            pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value, 0, 0, address(this), block.timestamp + 360);
+            swap(_value.div(2), address(this));
+            uint256 newBalance = IERC20(xBlade).balanceOf(address(this));
+
+            pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value.div(2), 0, 0, treasury, block.timestamp + 360);
         }
+    }
+
+    /**
+     * @notice buy back to treasury
+     */
+    function buyBack(uint256 _value) internal {
+        // buy back every 8 hours
+        if (block.timestamp.sub(lastBuyBack) > 28800) {
+            lastBuyBack = block.timestamp;
+            swap(_value, treasury);
+        }
+    }
+
+    function setTreasury(address _treasury) public onlyOwner {
+        treasury = _treasury;
     }
 
     /* ======== VIEW FUNCTIONS ======== */
