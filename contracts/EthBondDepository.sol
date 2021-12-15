@@ -327,7 +327,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return uint
      */
     function payoutFor(uint256 _value) public view returns (uint256) {
-        return FixedPoint.fraction(_value, bondPrice()).decode112with18().div(1e14);
+        return FixedPoint.fraction(_value, bondPrice()).decode112with18();
     }
 
     /**
@@ -335,7 +335,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return price_ uint
      */
     function bondPrice() public view returns (uint256 price_) {
-        price_ = assetPrice().mul(terms.discountRate).div(1000);
+        price_ = assetPrice().sub(assetPrice().mul(terms.discountRate).div(1000));
         if (price_ < terms.minimumPrice) {
             price_ = terms.minimumPrice;
         }
@@ -362,7 +362,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return price_ uint
      */
     function bondPriceInUSD() public view returns (uint256 price_) {
-        price_ = bondPrice().mul(assetPrice()).mul(1e12).div(1e18);
+        price_ = bondPrice();
     }
 
     /**

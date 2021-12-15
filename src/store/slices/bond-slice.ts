@@ -142,7 +142,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         const maxBondQuote = await bondContract.payoutFor(maxValuation);
         maxBondPriceToken = maxBondPrice / (maxBondQuote * Math.pow(10, -9));
     } else {
-        console.log(amountInWei);
         bondQuote = await bondContract.payoutFor(amountInWei);
         bondQuote = bondQuote / Math.pow(10, 18);
 
@@ -180,7 +179,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
             purchased = purchased * avaxPrice;
         }
     }
-    console.log({ bondPrice });
+
     return {
         bond: bond.name,
         bondDiscount,

@@ -17,19 +17,19 @@ export const loadAppDetails = createAsyncThunk(
     "app/loadAppDetails",
     //@ts-ignore
     async ({ networkID, provider }: ILoadAppDetails) => {
-        const mimPrice = getTokenPrice("MIM");
+        const mimPrice = getTokenPrice("BUSD");
         const addresses = getAddresses(networkID);
 
         const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
         const currentBlock = await provider.getBlockNumber();
         const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
-        const memoContract = new ethers.Contract(addresses.MEMO_ADDRESS, MemoTokenContract, provider);
-        const timeContract = new ethers.Contract(addresses.TIME_ADDRESS, TimeTokenContract, provider);
+        // const memoContract = new ethers.Contract(addresses.MEMO_ADDRESS, MemoTokenContract, provider);
+        const timeContract = new ethers.Contract(addresses.XBLADE_ADDRESS, TimeTokenContract, provider);
 
         const marketPrice = ((await getMarketPrice(networkID, provider)) / Math.pow(10, 9)) * mimPrice;
 
         const totalSupply = (await timeContract.totalSupply()) / Math.pow(10, 9);
-        const circSupply = (await memoContract.circulatingSupply()) / Math.pow(10, 9);
+        const circSupply = 0;
 
         const stakingTVL = circSupply * marketPrice;
         const marketCap = totalSupply * marketPrice;
@@ -49,15 +49,15 @@ export const loadAppDetails = createAsyncThunk(
 
         const rfv = rfvTreasury / timeSupply;
 
-        const epoch = await stakingContract.epoch();
-        const stakingReward = epoch.distribute;
-        const circ = await memoContract.circulatingSupply();
-        const stakingRebase = stakingReward / circ;
+        // const epoch = await stakingContract.epoch();
+        // const stakingReward = epoch.distribute;
+        const circ = 0;
+        const stakingRebase = 0;
         const fiveDayRate = Math.pow(1 + stakingRebase, 5 * 3) - 1;
         const stakingAPY = Math.pow(1 + stakingRebase, 365 * 3) - 1;
 
-        const currentIndex = await stakingContract.index();
-        const nextRebase = epoch.endTime;
+        const currentIndex = 0;
+        const nextRebase = 0;
 
         const treasuryRunway = rfvTreasury / circSupply;
         const runway = Math.log(treasuryRunway) / Math.log(1 + stakingRebase) / 3;

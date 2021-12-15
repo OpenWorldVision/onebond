@@ -24,14 +24,14 @@ export const zapinLpData = async (bond: IAllBondData, token: IToken, tokenAmmoun
 };
 
 export const zapinData = async (bond: IAllBondData, token: IToken, tokenAmmount: string, network: Networks, slippage: number) => {
-    const sellToken = token.isAvax ? "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" : token.address;
-    const buyToken = bond.getAddressForReserve(network);
+    // const sellToken = token.isAvax ? "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" : token.address;
+    // const buyToken = bond.getAddressForReserve(network);
 
-    const url = `https://avalanche.api.0x.org/swap/v1/quote?buyToken=${buyToken}&includePriceComparisons=true&intentOnFilling=true&sellAmount=${tokenAmmount}&sellToken=${sellToken}&skipValidation=true&slippagePercentage=${slippage}`;
-    const { data } = await axios.get(url);
+    // const url = `https://avalanche.api.0x.org/swap/v1/quote?buyToken=${buyToken}&includePriceComparisons=true&intentOnFilling=true&sellAmount=${tokenAmmount}&sellToken=${sellToken}&skipValidation=true&slippagePercentage=${slippage}`;
+    // const { data } = await axios.get(url);
 
-    const dataBuyAmount = BigNumber.from(data.buyAmount);
-    const buyAmount = dataBuyAmount.sub(dataBuyAmount.mul(slippage * 1000).div(1000));
-
-    return [data.to, data.data, buyAmount.toString()];
+    // const dataBuyAmount = BigNumber.from(data.buyAmount);
+    // const buyAmount = dataBuyAmount.sub(dataBuyAmount.mul(slippage * 1000).div(1000));
+    return ["0", "0", "0"];
+    // return [data.to, data.data, buyAmount.toString()];
 };

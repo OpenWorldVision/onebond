@@ -38,7 +38,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
 
     async function onBond() {
         if (await checkWrongNetwork()) return;
-
+        console.log("Bond");
         if (quantity === "") {
             dispatch(warning({ text: messages.before_minting }));
             //@ts-ignore
@@ -46,6 +46,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
             dispatch(warning({ text: messages.before_minting }));
         } else if (bond.interestDue > 0 || bond.pendingPayout > 0) {
             const shouldProceed = window.confirm(messages.existing_mint);
+            console.log(quantity);
             if (shouldProceed) {
                 const trimBalance = trim(Number(quantity), 10);
 

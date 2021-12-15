@@ -27,13 +27,14 @@ export class StableBond extends Bond {
     }
 
     public async getTreasuryBalance(networkID: Networks, provider: StaticJsonRpcProvider) {
-        const addresses = getAddresses(networkID);
-        const token = this.getContractForReserve(networkID, provider);
-        let tokenAmount = await token.balanceOf(addresses.TREASURY_ADDRESS);
-        if (this.tokensInStrategy) {
-            tokenAmount = BigNumber.from(tokenAmount).add(BigNumber.from(this.tokensInStrategy)).toString();
-        }
-        return tokenAmount / Math.pow(10, 18);
+        return 0;
+        // const addresses = getAddresses(networkID);
+        // const token = this.getContractForReserve(networkID, provider);
+        // let tokenAmount = await token.balanceOf(addresses.TREASURY_ADDRESS);
+        // if (this.tokensInStrategy) {
+        //     tokenAmount = BigNumber.from(tokenAmount).add(BigNumber.from(this.tokensInStrategy)).toString();
+        // }
+        // return tokenAmount / Math.pow(10, 18);
     }
 
     public async getTokenAmount(networkID: Networks, provider: StaticJsonRpcProvider) {
