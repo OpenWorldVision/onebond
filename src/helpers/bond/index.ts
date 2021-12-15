@@ -6,6 +6,7 @@ import AvaxIcon from "../../assets/tokens/AVAX.svg";
 import MimTimeIcon from "../../assets/tokens/TIME-MIM.svg";
 import AvaxTimeIcon from "../../assets/tokens/TIME-AVAX.svg";
 import BnbIcon from "../../assets/tokens/BNB.png";
+import BusdIcon from "../../assets/tokens/BUSD.svg";
 
 import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract } from "../../abi";
 
@@ -45,8 +46,8 @@ export const busd = new CustomBond({
     name: "busd",
     displayName: "BUSD",
     bondToken: "BUSD",
-    bondIconSvg: AvaxIcon,
-    bondContractABI: WavaxBondContract,
+    bondIconSvg: BusdIcon,
+    bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {

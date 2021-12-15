@@ -39,7 +39,7 @@ module.exports = async function (deployer, network) {
     const maxPayout = 28; // 0.9%
     const initialDebt = 0;
     const maxDebt = "28000000000000000000000"; // Max 28.000 xBlade
-    const discount = 170; // 17%
+    const discount = 125; // 12.5%
 
     await xBladeBond.setBondTerms(0, minimumTerm);
     await xBladeBond.initializeBondTerms(minimumPrice, maxPayout, maxDebt, initialDebt, minimumTerm, discount);

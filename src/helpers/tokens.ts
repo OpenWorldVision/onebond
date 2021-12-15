@@ -2,6 +2,7 @@ import AvaxIcon from "../assets/tokens/AVAX.svg";
 import AaveIcon from "../assets/tokens/AAVE.e.png";
 import ApeXIcon from "../assets/tokens/Ape-X.png";
 import ApeinIcon from "../assets/tokens/APEIN.png";
+import BusdIcon from "../assets/tokens/BUSD.svg";
 import BifiIcon from "../assets/tokens/BIFI.png";
 import BlizzIcon from "../assets/tokens/BLIZZ.png";
 import BnbIcon from "../assets/tokens/BNB.png";
@@ -95,6 +96,13 @@ const blizz: IToken = {
     name: "BLIZZ",
     address: "0xB147656604217a03Fe2c73c4838770DF8d9D21B8",
     img: BlizzIcon,
+    decimals: 18,
+};
+
+const busd: IToken = {
+    name: "BUSD",
+    address: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+    img: BusdIcon,
     decimals: 18,
 };
 
@@ -441,4 +449,5 @@ export default [
     weth,
     xava,
     yak,
+    busd,
 ];

@@ -183,7 +183,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _amount,
         uint256 _maxPrice,
         address _depositor
-    ) external payable returns (uint256) {
+    ) external returns (uint256) {
         require(_depositor != address(0), "Invalid address");
 
         decayDebt();
