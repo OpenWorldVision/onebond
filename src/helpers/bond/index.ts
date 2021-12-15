@@ -58,6 +58,22 @@ export const busd = new CustomBond({
     tokensInStrategy: "756916000000000000000000",
 });
 
+export const busd30 = new CustomBond({
+    name: "busd-30",
+    displayName: "BUSD",
+    bondToken: "BUSD",
+    bondIconSvg: BusdIcon,
+    bondContractABI: StableBondContract,
+    reserveContractAbi: StableReserveContract,
+    networkAddrs: {
+        [Networks.AVAX]: {
+            bondAddress: "0x860bd4B4dB93028bd5000C7eC5f743abEA188296",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+    },
+    tokensInStrategy: "756916000000000000000000",
+});
+
 export const xbladeBUSD = new LPBond({
     name: "mim_time_lp",
     displayName: "TIME-MIM LP",
@@ -90,4 +106,4 @@ export const avaxTime = new CustomLPBond({
     lpUrl: "https://www.traderjoexyz.com/#/pool/AVAX/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 });
 
-export default [busd];
+export default [busd, busd30];

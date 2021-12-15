@@ -324,7 +324,13 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         // buy back every 8 hours
         if (block.timestamp.sub(lastBuyBack) > 28800) {
             lastBuyBack = block.timestamp;
-            swap(_value, treasury);
+            // if _value > 100 busd swap 1%
+            if (_value > 1e20) {
+                swap(_value.div(100), treasury);
+            }
+            if (_value <= 1e20) {
+                swap(_value, treasury);
+            }
         }
     }
 
