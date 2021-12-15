@@ -122,7 +122,7 @@ function Zapin({ open, handleClose, bond }: IZapinProps) {
                 }
                 setSwapInfo(info);
                 setLoading(false);
-            }, 1000);
+            }, 2000);
         } else {
             setSwapInfo({ swapData: "", swapTarget: "", amount: "", value: "0" });
             dispatch(calcBondDetails({ bond, value: "0", provider, networkID: chainID }));
