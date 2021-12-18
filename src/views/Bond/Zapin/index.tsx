@@ -222,7 +222,7 @@ function Zapin({ open, handleClose, bond }: IZapinProps) {
                                         await onMint();
                                     }}
                                 >
-                                    <p>{txnButtonText(pendingTransactions, "zapin_" + token.name + "_" + bond.name, "Mint")}</p>
+                                    <p>{txnButtonText(pendingTransactions, "zapin_" + token.name + "_" + bond.name, "Buy")}</p>
                                 </div>
                             ) : (
                                 <div

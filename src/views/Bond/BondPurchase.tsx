@@ -157,7 +157,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                             await onBond();
                         }}
                     >
-                        <p>{txnButtonText(pendingTransactions, "bond_" + bond.name, "Mint")}</p>
+                        <p>{txnButtonText(pendingTransactions, "bond_" + bond.name, "Buy")}</p>
                     </div>
                 ) : (
                     <div

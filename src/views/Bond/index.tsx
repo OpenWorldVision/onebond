@@ -44,7 +44,7 @@ function Bond({ bond }: IBondProps) {
                             {/* @ts-ignore */}
                             <Box direction="row" className="bond-price-data-row">
                                 <div className="bond-price-data">
-                                    <p className="bond-price-data-title">Mint Price</p>
+                                    <p className="bond-price-data-title">Sale Price</p>
                                     <p className="bond-price-data-value">
                                         {isBondLoading ? <Skeleton /> : bond.isLP || bond.name === "wavax" ? `$${trim(bond.bondPrice, 4)}` : `${trim(bond.bondPrice, 4)} BUSD`}
                                     </p>
@@ -57,7 +57,7 @@ function Bond({ bond }: IBondProps) {
 
                             <div className="bond-one-table">
                                 <div className={classnames("bond-one-table-btn", { active: !view })} onClick={changeView(0)}>
-                                    <p>Mint</p>
+                                    <p>Buy</p>
                                 </div>
                                 <div className={classnames("bond-one-table-btn", { active: view })} onClick={changeView(1)}>
                                     <p>Redeem</p>
