@@ -109,6 +109,18 @@ export function BondTableData({ bond }: IBondProps) {
                     )}
                 </p>
             </TableCell>
+            <TableCell align="right">
+                <p className="bond-name-title">
+                    {isBondLoading ? (
+                        <Skeleton width="50px" />
+                    ) : (
+                        new Intl.NumberFormat("en-US", {
+                            maximumFractionDigits: 0,
+                            minimumFractionDigits: 0,
+                        }).format(bond.available)
+                    )}
+                </p>
+            </TableCell>
             <TableCell>
                 <Link component={NavLink} to={`/mints/${bond.name}`}>
                     <div className="bond-table-btn">

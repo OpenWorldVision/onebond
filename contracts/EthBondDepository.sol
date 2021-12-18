@@ -69,6 +69,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     IPancakeRouter02 public pancakeRouter;
 
     uint256 public lastBuyBack;
+    uint256 public totalPurchased;
+    uint256 public currentSale;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -172,6 +174,14 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         }
     }
 
+    function setPrice(address _feed) public onlyOwner {
+        priceFeed = AggregatorV3Interface(_feed);
+    }
+
+    function setCurrentSale(uint256 _initialSale) public onlyOwner {
+        currentSale = _initialSale;
+    }
+
     /* ======== USER FUNCTIONS ======== */
 
     /**
@@ -199,8 +209,12 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 value = _amount;
         uint256 payout = payoutFor(value); // payout to bonder is computed
 
+        require(currentSale >= payout, "No more sale token");
         require(payout >= 10000000, "Bond too small"); // must be > 0.01 xBlade ( underflow protection )
         require(payout <= maxPayout(), "Bond too large"); // size protection because there is no slippage
+
+        currentSale = currentSale.sub(payout);
+        totalPurchased = totalPurchased.add(value);
         /**
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout

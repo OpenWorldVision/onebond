@@ -219,10 +219,10 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                         <p className="bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
                     </div>
 
-                    <div className="data-row">
+                    {/* <div className="data-row">
                         <p className="bond-balance-title">Minimum purchase</p>
                         <p className="bond-balance-title">500 XBLADE</p>
-                    </div>
+                    </div> */}
                 </Box>
             </Slide>
             <Zapin open={zapinOpen} handleClose={handleZapinClose} bond={bond} />

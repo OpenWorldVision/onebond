@@ -48,12 +48,12 @@ function ChooseBond() {
                             </Box>
                         </Grid> */}
 
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
                                 <p className="choose-bond-view-card-metrics-title">XBLADE Price</p>
                                 <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 4)}`}</p>
                             </Box>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
 
                     {!isSmallScreen && (
@@ -73,6 +73,9 @@ function ChooseBond() {
                                             </TableCell>
                                             <TableCell align="right">
                                                 <p className="choose-bond-view-card-table-title">Purchased</p>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <p className="choose-bond-view-card-table-title">Available</p>
                                             </TableCell>
                                             <TableCell align="right"></TableCell>
                                         </TableRow>

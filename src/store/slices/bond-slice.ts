@@ -91,6 +91,7 @@ export interface IBondDetails {
     bondPrice: number;
     marketPrice: number;
     maxBondPriceToken: number;
+    available: number;
 }
 
 export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async ({ bond, value, provider, networkID }: ICalcBondDetails, { dispatch }) => {
@@ -115,7 +116,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     let marketPrice = await getMarketPrice(networkID, provider);
     const usdPrice = getTokenPrice("BUSD");
-    marketPrice = (1 / marketPrice) * usdPrice;
+    marketPrice = (1 / marketPrice) * 1;
 
     try {
         bondPrice = await bondContract.bondPriceInUSD();
@@ -124,7 +125,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
             const avaxPrice = getTokenPrice("AVAX");
             bondPrice = bondPrice * avaxPrice;
         }
-
+        console.log(marketPrice);
         bondDiscount = (marketPrice * Math.pow(10, 18) - bondPrice) / bondPrice;
     } catch (e) {
         console.log("error getting bondPriceInUSD", e);
@@ -154,8 +155,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     }
 
     // Calculate bonds purchased
-    const token = bond.getContractForReserve(networkID, provider);
-    let purchased = await token.balanceOf(addresses.TREASURY_ADDRESS);
+    let purchased = await bondContract.totalPurchased();
 
     if (bond.isLP) {
         const assetAddress = bond.getAddressForReserve(networkID);
@@ -170,16 +170,18 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         }
     } else {
         if (bond.tokensInStrategy) {
-            purchased = BigNumber.from(purchased).add(BigNumber.from(bond.tokensInStrategy)).toString();
+            purchased = purchased.toString();
         }
         purchased = purchased / Math.pow(10, 18);
 
-        if (bond.name === bnb.name) {
-            const avaxPrice = getTokenPrice("AVAX");
-            purchased = purchased * avaxPrice;
-        }
+        // if (bond.name === bnb.name) {
+        //     const avaxPrice = getTokenPrice("AVAX");
+        //     purchased = purchased * avaxPrice;
+        // }
     }
 
+    let available = await bondContract.currentSale();
+    available = available / Math.pow(10, 18);
     return {
         bond: bond.name,
         bondDiscount,
@@ -190,6 +192,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         bondPrice: bondPrice / Math.pow(10, 18),
         marketPrice,
         maxBondPriceToken,
+        available,
     };
 });
 

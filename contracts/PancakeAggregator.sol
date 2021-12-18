@@ -26,11 +26,10 @@ contract PancakeAggregator {
 
     function latestRoundData() external view returns (uint256) {
         // generate the pancake pair path of xblade -> weth -> usd
-        address[] memory path = new address[](3);
+        address[] memory path = new address[](2);
         path[0] = token;
-        path[1] = pancakeRouter.WETH();
-        path[2] = BUSDAddress;
+        path[1] = BUSDAddress;
 
-        return pancakeRouter.getAmountsOut(1e18, path)[2];
+        return pancakeRouter.getAmountsOut(1e18, path)[1];
     }
 }
