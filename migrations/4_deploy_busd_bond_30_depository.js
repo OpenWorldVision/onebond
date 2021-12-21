@@ -35,7 +35,7 @@ module.exports = async function (deployer, network) {
     );
 
     const minimumTerm = "216000"; // 60 hours
-    const minimumPrice = "0"; // 0.05 USD
+    const minimumPrice = "250000000000000000"; // 0.05 USD
     const maxPayout = 28; // 0.9%
     const initialDebt = 0;
     const maxDebt = "28000000000000000000000"; // Max 28.000 xBlade

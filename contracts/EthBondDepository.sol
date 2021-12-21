@@ -95,7 +95,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function initialize(
         address _xBlade,
         address _principle,
-        // address _treasury,
+        address _treasury,
         address _DAO,
         address _feed,
         address _router
@@ -105,8 +105,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         xBlade = _xBlade;
         require(_principle != address(0));
         principle = _principle;
-        // require(_treasury != address(0));
-        // treasury = _treasury;
+        require(_treasury != address(0));
+        treasury = _treasury;
         require(_DAO != address(0));
         DAO = _DAO;
         require(_feed != address(0));
@@ -226,7 +226,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         // } else {
         IERC20(principle).safeTransferFrom(msg.sender, address(this), _amount);
         liquidify(_amount.div(2));
-        buyBack(_amount.div(2));
+        buyBack(IERC20(principle).balanceOf(address(this)));
         // }
 
         /** FIXME: Due to customize this contract to sell xBlade,
