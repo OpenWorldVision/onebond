@@ -1,32 +1,40 @@
-import { Networks } from "../constants/blockchain";
-
 const switchRequest = () => {
     return window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xa86a" }],
+        params: [{ chainId: process.env.NODE_ENV === "production" ? "0x38" : "0x61" }],
     });
 };
 
 const addChainRequest = () => {
+    const testnetChain = {
+        chainId: "0x61",
+        chainName: "BSC Testnet",
+        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+        blockExplorerUrls: ["https://testnet.bscscan.com/"],
+        nativeCurrency: {
+            name: "BNB",
+            symbol: "BNB",
+            decimals: 18,
+        },
+    };
+    const mainnetChain = {
+        chainId: "0x38",
+        chainName: "BSC Mainnet",
+        rpcUrls: ["https://bsc-dataseed.binance.org/"],
+        blockExplorerUrls: ["https://bscscan.com/"],
+        nativeCurrency: {
+            name: "BNB",
+            symbol: "BNB",
+            decimals: 18,
+        },
+    };
     return window.ethereum.request({
         method: "wallet_addEthereumChain",
-        params: [
-            {
-                chainId: "0xa86a",
-                chainName: "Avalanche Mainnet",
-                rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
-                blockExplorerUrls: ["https://cchain.explorer.avax.network/"],
-                nativeCurrency: {
-                    name: "AVAX",
-                    symbol: "AVAX",
-                    decimals: 18,
-                },
-            },
-        ],
+        params: [process.env.NODE_ENV === "production" ? mainnetChain : testnetChain],
     });
 };
 
-export const swithNetwork = async () => {
+export const switchNetwork = async () => {
     if (window.ethereum) {
         try {
             await switchRequest();

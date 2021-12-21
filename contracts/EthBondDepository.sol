@@ -49,7 +49,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     event BondCreated(uint256 deposit, uint256 indexed payout, uint256 indexed expires, uint256 indexed priceInUSD);
     event BondRedeemed(address indexed recipient, uint256 payout, uint256 remaining);
-    event BondPriceChanged(uint256 indexed priceInUSD, uint256 indexed internalPrice, uint256 indexed debtRatio);
+    event BondPriceChanged(uint256 indexed priceInUSD, uint256 indexed internalPrice);
 
     /* ======== STATE VARIABLES ======== */
     address public xBlade; // token given as payment for bond
@@ -63,9 +63,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     mapping(address => Bond) public bondInfo; // stores bond information for depositors
 
-    uint256 public totalDebt; // total value of outstanding bonds; used for pricing
-    uint32 public lastDecay; // reference block for debt decay
-
     IPancakeRouter02 public pancakeRouter;
 
     uint256 public lastBuyBack;
@@ -77,7 +74,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     struct Terms {
         uint256 minimumPrice; // vs principle value. 4 decimals (1500 = 0.15)
         uint256 maxPayout; // in thousandths of a %. i.e. 500 = 0.5%
-        uint256 maxDebt; // 9 decimal debt ratio, max % total supply created as debt
         uint32 vestingTerm; // in seconds
         uint256 discountRate; // in percent
     }
@@ -119,22 +115,22 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @param _vestingTerm uint
      *  @param _minimumPrice uint
      *  @param _maxPayout uint
-     *  @param _maxDebt uint
-     *  @param _initialDebt uint
      *  @param _discountRate uint
      */
     function initializeBondTerms(
         uint256 _minimumPrice,
         uint256 _maxPayout,
-        uint256 _maxDebt,
-        uint256 _initialDebt,
         uint32 _vestingTerm,
         uint256 _discountRate
     ) external onlyOwner {
-        require(currentDebt() == 0, "Debt must be 0 for initialization");
-        terms = Terms({ vestingTerm: _vestingTerm, minimumPrice: _minimumPrice, maxPayout: _maxPayout, maxDebt: _maxDebt, discountRate: _discountRate });
-        totalDebt = _initialDebt;
-        lastDecay = uint32(block.timestamp);
+        terms = Terms({ vestingTerm: _vestingTerm, minimumPrice: _minimumPrice, maxPayout: _maxPayout, discountRate: _discountRate });
+    }
+
+    /* ======== MODIFIERS ======== */
+
+    modifier onlyNonContract() {
+        require(tx.origin == msg.sender);
+        _;
     }
 
     /* ======== POLICY FUNCTIONS ======== */
@@ -163,7 +159,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             terms.maxPayout = _input;
         } else if (_parameter == PARAMETER.DEBT) {
             // 2
-            terms.maxDebt = _input;
+            // Do nothing
+            // terms.maxDebt = _input;
         } else if (_parameter == PARAMETER.MINPRICE) {
             // 3
             terms.minimumPrice = _input;
@@ -195,11 +192,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _amount,
         uint256 _maxPrice,
         address _depositor
-    ) external returns (uint256) {
+    ) external onlyNonContract returns (uint256) {
         require(_depositor != address(0), "Invalid address");
-
-        decayDebt();
-        require(totalDebt <= terms.maxDebt, "Max capacity reached");
 
         uint256 priceInUSD = bondPriceInUSD(); // Stored in bond info
         uint256 nativePrice = _bondPrice();
@@ -236,16 +230,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             ITreasury(treasury).mintRewards(address(this), payout);
         */
 
-        // total debt is increased
-        totalDebt = totalDebt.add(value);
-
         // depositor info is stored
         bondInfo[_depositor] = Bond({ payout: bondInfo[_depositor].payout.add(payout), vesting: terms.vestingTerm, lastTime: uint32(block.timestamp), pricePaid: priceInUSD });
 
         // indexed events are emitted
         emit BondCreated(_amount, payout, block.timestamp.add(terms.vestingTerm), priceInUSD);
-        emit BondPriceChanged(bondPriceInUSD(), _bondPrice(), debtRatio());
-        refundETH(); //refund user if needed
         return payout;
     }
 
@@ -255,7 +244,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @param _stake bool
      *  @return uint
      */
-    function redeem(address _recipient, bool _stake) external returns (uint256) {
+    function redeem(address _recipient, bool _stake) external onlyNonContract returns (uint256) {
         Bond memory info = bondInfo[_recipient];
         uint256 percentVested = percentVestedFor(_recipient); // (blocks since last interaction / vesting term remaining)
 
@@ -292,14 +281,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function stakeOrSend(address _recipient, uint256 _amount) internal returns (uint256) {
         IERC20(xBlade).transfer(_recipient, _amount); // send payout
         return _amount;
-    }
-
-    /**
-     *  @notice reduce total debt
-     */
-    function decayDebt() internal {
-        totalDebt = totalDebt.sub(debtDecay());
-        lastDecay = uint32(block.timestamp);
     }
 
     function swap(uint256 _value, address to) internal {
@@ -404,35 +385,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      */
     function bondPriceInUSD() public view returns (uint256 price_) {
         price_ = bondPrice();
-    }
-
-    /**
-     *  @notice calculate current ratio of debt to xBlade supply
-     *  @return debtRatio_ uint
-     */
-    function debtRatio() public view returns (uint256 debtRatio_) {
-        uint256 supply = IERC20(xBlade).totalSupply();
-        debtRatio_ = FixedPoint.fraction(currentDebt().mul(1e9), supply).decode112with18().div(1e18);
-    }
-
-    /**
-     *  @notice calculate debt factoring in decay
-     *  @return uint
-     */
-    function currentDebt() public view returns (uint256) {
-        return totalDebt.sub(debtDecay());
-    }
-
-    /**
-     *  @notice amount to decay total debt by
-     *  @return decay_ uint
-     */
-    function debtDecay() public view returns (uint256 decay_) {
-        uint32 timeSinceLast = uint32(block.timestamp).sub32(lastDecay);
-        decay_ = totalDebt.mul(timeSinceLast).div(terms.vestingTerm);
-        if (decay_ > totalDebt) {
-            decay_ = totalDebt;
-        }
     }
 
     /**

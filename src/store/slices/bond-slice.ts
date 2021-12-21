@@ -107,7 +107,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         bondQuote = 0;
 
     const addresses = getAddresses(networkID);
-
+    console.log(addresses);
     const bondContract = bond.getContractForBond(networkID, provider);
     const bondCalcContract = getBondCalculator(networkID, provider);
 
@@ -115,7 +115,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 18);
 
     let marketPrice = await getMarketPrice(networkID, provider);
-    const usdPrice = getTokenPrice("BUSD");
     marketPrice = (1 / marketPrice) * 1;
 
     try {
@@ -125,7 +124,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
             const avaxPrice = getTokenPrice("AVAX");
             bondPrice = bondPrice * avaxPrice;
         }
-        console.log(marketPrice);
         bondDiscount = (marketPrice * Math.pow(10, 18) - bondPrice) / bondPrice;
     } catch (e) {
         console.log("error getting bondPriceInUSD", e);

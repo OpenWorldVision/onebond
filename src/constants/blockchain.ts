@@ -5,4 +5,4 @@ export enum Networks {
     BSC_MAINNET = 56,
 }
 
-export const DEFAULD_NETWORK = Networks.AVAX;
+export const DEFAULT_NETWORK = Networks.AVAX;
