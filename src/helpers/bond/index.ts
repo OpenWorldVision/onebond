@@ -63,7 +63,7 @@ export const busd = new CustomBond({
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F",
-            reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
+            reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -83,7 +83,7 @@ export const busd30 = new CustomBond({
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0x050ecA1D00ff0cf565796a393d5152886fe9D272",
-            reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
+            reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
     },
     tokensInStrategy: "756916000000000000000000",
