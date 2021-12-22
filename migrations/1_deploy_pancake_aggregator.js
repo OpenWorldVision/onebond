@@ -11,9 +11,9 @@ module.exports = async function (deployer, network) {
     }
 
     if (network === "bscmainnet") {
-        router = "";
-        token = "";
-        busdAddress = "";
+        router = "0x10ed43c718714eb63d5aa57b78b54704e256024e";
+        token = "0x27a339d9b59b21390d7209b78a839868e319301b";
+        busdAddress = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
     }
     await deployer.deploy(PancakeAggregator, router, token, busdAddress);
 };
