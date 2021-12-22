@@ -62,8 +62,8 @@ export const busd = new CustomBond({
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
-            bondAddress: "0x63F010B357Bd1188e18111D01C3D1Db7dc13D4a3",
-            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+            bondAddress: "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F",
+            reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -82,8 +82,8 @@ export const busd30 = new CustomBond({
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
-            bondAddress: "0x860bd4B4dB93028bd5000C7eC5f743abEA188296",
-            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+            bondAddress: "0x050ecA1D00ff0cf565796a393d5152886fe9D272",
+            reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -103,7 +103,7 @@ export const xbladeBUSD = new LPBond({
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
-            reserveAddress: "0x78b5157aff2b08a4b4cee16f1e8b801515ae529a",
+            reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
         },
     },
     lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",

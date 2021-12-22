@@ -107,7 +107,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         bondQuote = 0;
 
     const addresses = getAddresses(networkID);
-    console.log(addresses);
+
     const bondContract = bond.getContractForBond(networkID, provider);
     const bondCalcContract = getBondCalculator(networkID, provider);
 

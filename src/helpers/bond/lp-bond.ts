@@ -49,6 +49,7 @@ export class LPBond extends Bond {
     }
 
     private async getReserves(networkID: Networks, provider: StaticJsonRpcProvider, isToken: boolean): Promise<number> {
+        console.log("network ", networkID);
         const addresses = getAddresses(networkID);
 
         const token = this.getContractForReserve(networkID, provider);

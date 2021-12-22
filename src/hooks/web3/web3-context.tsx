@@ -113,13 +113,14 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
         const connectedProvider = new Web3Provider(rawProvider, "any");
 
         const chainId = await connectedProvider.getNetwork().then(network => Number(network.chainId));
+
         const connectedAddress = await connectedProvider.getSigner().getAddress();
 
         setAddress(connectedAddress);
 
         setProviderChainID(chainId);
 
-        if (chainId === Networks.AVAX) {
+        if (chainId === Networks.BSC_MAINNET || chainId === Networks.AVAX) {
             setProvider(connectedProvider);
         }
 

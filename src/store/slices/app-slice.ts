@@ -18,16 +18,17 @@ export const loadAppDetails = createAsyncThunk(
     //@ts-ignore
     async ({ networkID, provider }: ILoadAppDetails) => {
         const mimPrice = getTokenPrice("BUSD");
+
         const addresses = getAddresses(networkID);
 
-        const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
+        // const stakingContract = new ethers.Contract(addresses.STAKING_ADDRESS, StakingContract, provider);
         const currentBlock = await provider.getBlockNumber();
         const currentBlockTime = (await provider.getBlock(currentBlock)).timestamp;
         // const memoContract = new ethers.Contract(addresses.MEMO_ADDRESS, MemoTokenContract, provider);
         const timeContract = new ethers.Contract(addresses.XBLADE_ADDRESS, TimeTokenContract, provider);
-
+        console.log(networkID);
         const marketPrice = 1 / (await getMarketPrice(networkID, provider));
-
+        console.log(marketPrice);
         const totalSupply = (await timeContract.totalSupply()) / Math.pow(10, 9);
         const circSupply = 0;
 
