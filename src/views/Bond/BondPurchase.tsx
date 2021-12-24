@@ -12,6 +12,7 @@ import useDebounce from "../../hooks/debounce";
 import { messages } from "../../constants/messages";
 import { warning } from "../../store/slices/messages-slice";
 import Zapin from "./Zapin";
+import { DEFAULT_NETWORK } from "src/constants";
 
 interface IBondPurchaseProps {
     bond: IAllBondData;
@@ -20,7 +21,7 @@ interface IBondPurchaseProps {
 
 function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
     const dispatch = useDispatch();
-    const { provider, address, chainID, checkWrongNetwork } = useWeb3Context();
+    const { provider, address, chainID, checkWrongNetwork, connected, connect, providerChainID } = useWeb3Context();
 
     const [quantity, setQuantity] = useState("");
     const [useAvax, setUseAvax] = useState(false);
@@ -157,7 +158,13 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                             await onBond();
                         }}
                     >
-                        <p>{txnButtonText(pendingTransactions, "bond_" + bond.name, "Buy")}</p>
+                        {connected && providerChainID === DEFAULT_NETWORK ? (
+                            <p>{txnButtonText(pendingTransactions, "bond_" + bond.name, "Buy")}</p>
+                        ) : (
+                            <div className="bond-table-btn" onClick={connect}>
+                                <p>{connected ? "Wrong Network" : "Connect Wallet"}</p>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div
@@ -167,7 +174,13 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                             await onSeekApproval();
                         }}
                     >
-                        <p>{txnButtonText(pendingTransactions, "approve_" + bond.name, "Approve")}</p>
+                        {connected && providerChainID === DEFAULT_NETWORK ? (
+                            <p>{txnButtonText(pendingTransactions, "approve_" + bond.name, "Approve")}</p>
+                        ) : (
+                            <div className="bond-table-btn" onClick={connect}>
+                                <p>{connected ? "Wrong Network" : "Connect Wallet"}</p>
+                            </div>
+                        )}
                     </div>
                 )}
 

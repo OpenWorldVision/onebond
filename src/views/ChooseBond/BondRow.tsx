@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 import "./choosebond.scss";
 import { Skeleton } from "@material-ui/lab";
 import { IAllBondData } from "../../hooks/bonds";
+import { useWeb3Context } from "src/hooks";
+import { DEFAULT_NETWORK } from "src/constants";
 
 interface IBondProps {
     bond: IAllBondData;
@@ -12,6 +14,7 @@ interface IBondProps {
 
 export function BondDataCard({ bond }: IBondProps) {
     const isBondLoading = !bond.bondPrice ?? true;
+    const { connected, connect } = useWeb3Context();
 
     return (
         <Slide direction="up" in={true}>
@@ -59,17 +62,39 @@ export function BondDataCard({ bond }: IBondProps) {
                         )}
                     </p>
                 </div>
-                <Link component={NavLink} to={`/mints/${bond.name}`}>
-                    <div className="bond-table-btn">
-                        <p>Mint {bond.displayName}</p>
+
+                <div className="data-row">
+                    <p className="bond-name-title">Available</p>
+                    <p className="bond-name-title">
+                        {isBondLoading ? (
+                            <Skeleton width="80px" />
+                        ) : (
+                            new Intl.NumberFormat("en-US", {
+                                maximumFractionDigits: 0,
+                                minimumFractionDigits: 0,
+                            }).format(bond.available)
+                        )}
+                    </p>
+                </div>
+
+                {connected ? (
+                    <Link component={NavLink} to={`/mints/${bond.name}`}>
+                        <div className="bond-table-btn">
+                            <p>Buy</p>
+                        </div>
+                    </Link>
+                ) : (
+                    <div className="bond-table-btn" onClick={connect}>
+                        <p>Connect Wallet</p>
                     </div>
-                </Link>
+                )}
             </Paper>
         </Slide>
     );
 }
 
 export function BondTableData({ bond }: IBondProps) {
+    const { connected, connect, providerChainID } = useWeb3Context();
     const isBondLoading = !bond.bondPrice ?? true;
 
     return (
@@ -122,11 +147,17 @@ export function BondTableData({ bond }: IBondProps) {
                 </p>
             </TableCell>
             <TableCell>
-                <Link component={NavLink} to={`/mints/${bond.name}`}>
-                    <div className="bond-table-btn">
-                        <p>Buy</p>
+                {connected && providerChainID === DEFAULT_NETWORK ? (
+                    <Link component={NavLink} to={`/mints/${bond.name}`}>
+                        <div className="bond-table-btn">
+                            <p>Buy</p>
+                        </div>
+                    </Link>
+                ) : (
+                    <div className="bond-table-btn" onClick={connect}>
+                        <p>{connected ? "Wrong Network" : "Connect Wallet"}</p>
                     </div>
-                </Link>
+                )}
             </TableCell>
         </TableRow>
     );

@@ -6,7 +6,7 @@
   overflow: hidden;
 
   width: 89%;
-  max-width: 833px;
+  max-width: 900px;
   margin: auto;
 
   .choose-bond-view-card{
@@ -16,12 +16,12 @@
 
     position: relative;
     z-index: 2;
-    
+
     @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
       background: #343a40;
       backdrop-filter: blur(40px);
     }
-  
+
     /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
     @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
       background: #343a40;
@@ -38,7 +38,7 @@
 
     .choose-bond-view-card-metrics{
       margin: 30px 0;
-      
+
       .choose-bond-view-card-metrics-title{
         font-family: Montserrat Medium;
         font-weight: 500;
@@ -46,7 +46,7 @@
         line-height: 24px;
         color: rgba(255, 255, 255, 0.6);
       }
-    
+
       .choose-bond-view-card-metrics-value{
         font-family: Montserrat Bold;
         font-weight: bold;
@@ -103,11 +103,11 @@
         justify-content: space-between;
         flex-direction: row;
         margin: 12px 0;
-  
+
         .bond-price {
           display: flex;
           align-items: center;
-  
+
           svg {
             margin-right: 5px;
           }
@@ -145,7 +145,7 @@
     &:hover{
       border: 1px solid rgba(255, 255, 255, 0.6);
     }
-  
+
     p{
       font-family: Montserrat Semibold;
       font-style: normal;

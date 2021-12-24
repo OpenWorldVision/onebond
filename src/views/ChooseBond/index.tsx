@@ -63,7 +63,7 @@ function ChooseBond() {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="center">
-                                                <p className="choose-bond-view-card-table-title">Mint</p>
+                                                <p className="choose-bond-view-card-table-title">Bond</p>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <p className="choose-bond-view-card-table-title">Price</p>

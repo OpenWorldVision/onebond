@@ -10,6 +10,7 @@ import { IAllBondData } from "../../hooks/bonds";
 import { IUserBondDetails } from "../../store/slices/account-slice";
 import { messages } from "../../constants/messages";
 import { warning } from "../../store/slices/messages-slice";
+import { DEFAULT_NETWORK } from "src/constants";
 
 interface IBondRedeem {
     bond: IAllBondData;
@@ -17,7 +18,7 @@ interface IBondRedeem {
 
 function BondRedeem({ bond }: IBondRedeem) {
     const dispatch = useDispatch();
-    const { provider, address, chainID, checkWrongNetwork } = useWeb3Context();
+    const { provider, address, chainID, checkWrongNetwork, connected, connect, providerChainID } = useWeb3Context();
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
 
@@ -69,7 +70,13 @@ function BondRedeem({ bond }: IBondRedeem) {
                         onRedeem(false);
                     }}
                 >
-                    <p>{txnButtonText(pendingTransactions, "redeem_bond_" + bond.name, "Claim")}</p>
+                    {connected && providerChainID === DEFAULT_NETWORK ? (
+                        <p>{txnButtonText(pendingTransactions, "redeem_bond_" + bond.name, "Claim")}</p>
+                    ) : (
+                        <div className="bond-table-btn" onClick={connect}>
+                            <p>{connected ? "Wrong Network" : "Connect Wallet"}</p>
+                        </div>
+                    )}
                 </div>
                 {/* <div
                     className="transaction-button bond-approve-btn"
