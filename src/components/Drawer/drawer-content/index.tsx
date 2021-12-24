@@ -40,7 +40,7 @@ function NavContent() {
     return (
         <div className="dapp-sidebar">
             <div className="branding-header">
-                <Link href="https://wonderland.money" target="_blank">
+                <Link href="https://www.cryptowar.network" target="_blank">
                     <img alt="" className="logo" src={WonderlandIcon} />
                 </Link>
 
@@ -130,7 +130,7 @@ function NavContent() {
                 </div>
             </div>
             <div className="dapp-menu-doc-link">
-                <Link href="https://wiki.cryptowar.network" target="_blank">
+                <Link href="https://wiki.cryptowar.network/xblade/bond-sales" target="_blank">
                     <img alt="" src={DocsIcon} />
                     <p>Docs</p>
                 </Link>
