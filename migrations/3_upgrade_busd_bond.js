@@ -7,7 +7,7 @@ module.exports = async function (deployer, network) {
         proxyAddress = "0x89635b79C155aE3A61198Ab194014208F4598c4f";
     }
     if (network === "bscmainnet") {
-        proxyAddress = "";
+        proxyAddress = "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F";
     }
     await upgradeProxy(
         proxyAddress,

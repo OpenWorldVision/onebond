@@ -17,9 +17,10 @@ import { DEFAULT_NETWORK } from "src/constants";
 interface IBondPurchaseProps {
     bond: IAllBondData;
     slippage: number;
+    refAddress: string;
 }
 
-function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
+function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
     const dispatch = useDispatch();
     const { provider, address, chainID, checkWrongNetwork, connected, connect, providerChainID } = useWeb3Context();
 
@@ -58,6 +59,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                         provider,
                         address,
                         useAvax,
+                        refAddress,
                     }),
                 );
                 clearInput();
@@ -74,6 +76,7 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                     provider,
                     address,
                     useAvax,
+                    refAddress,
                 }),
             );
             clearInput();
@@ -231,6 +234,13 @@ function BondPurchase({ bond, slippage }: IBondPurchaseProps) {
                         <p className="bond-balance-title">Vesting Term</p>
                         <p className="bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : vestingPeriod()}</p>
                     </div>
+
+                    {Boolean(refAddress) && (
+                        <div className="data-row">
+                            <p className="bond-balance-title">Referral By</p>
+                            <p className="bond-balance-title">{refAddress}</p>
+                        </div>
+                    )}
 
                     {/* <div className="data-row">
                         <p className="bond-balance-title">Minimum purchase</p>

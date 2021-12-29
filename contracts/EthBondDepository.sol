@@ -68,6 +68,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint256 public lastBuyBack;
     uint256 public totalPurchased;
     uint256 public currentSale;
+
+    uint256 public referralBonusRate;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -192,7 +194,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _amount,
         uint256 _maxPrice,
         address _depositor
-    ) external onlyNonContract returns (uint256) {
+    ) public onlyNonContract returns (uint256) {
         require(_depositor != address(0), "Invalid address");
 
         uint256 priceInUSD = bondPriceInUSD(); // Stored in bond info
@@ -236,6 +238,25 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         // indexed events are emitted
         emit BondCreated(_amount, payout, block.timestamp.add(terms.vestingTerm), priceInUSD);
         return payout;
+    }
+
+    /**
+     *  @notice deposit bond with referral
+     *  @param _amount uint
+     *  @param _maxPrice uint
+     *  @param _depositor address
+     *  @param _referrer address
+     *  @return uint
+     */
+    function depositWithReferral(
+        uint256 _amount,
+        uint256 _maxPrice,
+        address _depositor,
+        address _referrer
+    ) external onlyNonContract returns (uint256) {
+        require(_depositor != _referrer && msg.sender != _referrer, "Cannot refer yourself");
+        distributeReferral(_referrer, _amount);
+        return deposit(_amount, _maxPrice, _depositor);
     }
 
     /**
@@ -313,6 +334,18 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     }
 
     /**
+     * @notice distribute referral
+     */
+
+    function distributeReferral(address _referrer, uint256 _value) internal {
+        if (_referrer != address(0)) {
+            uint256 _refValue = _value.mul(referralBonusRate).div(100);
+            uint256 payout = FixedPoint.fraction(_refValue, assetPrice()).decode112with18(); // payout to referrer is computed
+            IERC20(xBlade).safeTransfer(_referrer, payout);
+        }
+    }
+
+    /**
      * @notice buy back to treasury
      */
     function buyBack(uint256 _value) internal {
@@ -331,6 +364,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     function setTreasury(address _treasury) public onlyOwner {
         treasury = _treasury;
+    }
+
+    function setReferralBonusRate(uint256 _rate) public onlyOwner {
+        referralBonusRate = _rate;
     }
 
     /* ======== VIEW FUNCTIONS ======== */

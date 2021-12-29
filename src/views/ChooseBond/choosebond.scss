@@ -26,6 +26,31 @@
     @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
       background: #343a40;
     }
+    &.referral-container {
+      margin: 24px 0;
+
+      .referral-input{
+        margin: 16px 0;
+        .MuiContainer-root {
+          flex-direction: row;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-radius: 8px;
+          background: #495057;  /* fallback for old browsers */
+          // background: -webkit-linear-gradient(to right, #bb06d3, #ea00ff);  /* Chrome 10-25, Safari 5.1-6 */
+          // background: linear-gradient(to right, #5e5e5e, #57015f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+        .MuiTypography-root {
+          color: #FFF;
+          font-weight: 500;
+        }
+        .MuiIconButton-root {
+          color: #FFF;
+        }
+      }
+
+    }
 
     .choose-bond-view-card-header{
       .choose-bond-view-card-title{
@@ -33,6 +58,15 @@
         font-weight: bold;
         font-size: 20px;
         color: #FFFFFF;
+      }
+
+      .choose-bond-view-card-subtitle{
+        font-family: Montserrat;
+        font-weight: 500;
+        font-size: 14px;
+        color: #FFFFFF;
+        font-style: italic;
+        margin-top: 8px;
       }
     }
 
@@ -232,4 +266,6 @@
   .choose-bond-view{
     width: 100%;
   }
+}
+.copy-button{
 }

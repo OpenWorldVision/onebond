@@ -186,6 +186,187 @@
           }
         }
       }
+    },
+    "a4b3a9160cc278cf7cc3d3e8b4b2cf06ded9d094892a31dbdf079c29dbe76d8e": {
+      "address": "0xcA3cA6a90946F34b69c51AB01e094d78b9393992",
+      "txHash": "0x8fa4e8c82c6ef252101624336eb97f7500b75add3cba54efb5e46e6b6548fd8d",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "xBlade",
+            "type": "t_address",
+            "src": "EthBondDepository.sol:55"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "principle",
+            "type": "t_address",
+            "src": "EthBondDepository.sol:56"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "treasury",
+            "type": "t_address",
+            "src": "EthBondDepository.sol:57"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "DAO",
+            "type": "t_address",
+            "src": "EthBondDepository.sol:58"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "priceFeed",
+            "type": "t_contract(AggregatorV3Interface)183",
+            "src": "EthBondDepository.sol:60"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "terms",
+            "type": "t_struct(Terms)310_storage",
+            "src": "EthBondDepository.sol:62"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "bondInfo",
+            "type": "t_mapping(t_address,t_struct(Bond)319_storage)",
+            "src": "EthBondDepository.sol:64"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "pancakeRouter",
+            "type": "t_contract(IPancakeRouter02)2462",
+            "src": "EthBondDepository.sol:66"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "lastBuyBack",
+            "type": "t_uint256",
+            "src": "EthBondDepository.sol:68"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "totalPurchased",
+            "type": "t_uint256",
+            "src": "EthBondDepository.sol:69"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "currentSale",
+            "type": "t_uint256",
+            "src": "EthBondDepository.sol:70"
+          },
+          {
+            "contract": "TimeBondDepository",
+            "label": "referralBonusRate",
+            "type": "t_uint256",
+            "src": "EthBondDepository.sol:72"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(AggregatorV3Interface)183": {
+            "label": "contract AggregatorV3Interface"
+          },
+          "t_struct(Terms)310_storage": {
+            "label": "struct TimeBondDepository.Terms",
+            "members": [
+              {
+                "label": "minimumPrice",
+                "type": "t_uint256"
+              },
+              {
+                "label": "maxPayout",
+                "type": "t_uint256"
+              },
+              {
+                "label": "vestingTerm",
+                "type": "t_uint32"
+              },
+              {
+                "label": "discountRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_address,t_struct(Bond)319_storage)": {
+            "label": "mapping(address => struct TimeBondDepository.Bond)"
+          },
+          "t_struct(Bond)319_storage": {
+            "label": "struct TimeBondDepository.Bond",
+            "members": [
+              {
+                "label": "payout",
+                "type": "t_uint256"
+              },
+              {
+                "label": "pricePaid",
+                "type": "t_uint256"
+              },
+              {
+                "label": "vesting",
+                "type": "t_uint32"
+              },
+              {
+                "label": "lastTime",
+                "type": "t_uint32"
+              }
+            ]
+          },
+          "t_contract(IPancakeRouter02)2462": {
+            "label": "contract IPancakeRouter02"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
     }
   }
 }

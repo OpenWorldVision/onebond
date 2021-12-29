@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { trim } from "../../helpers";
 import { Grid, Backdrop, Box, Fade } from "@material-ui/core";
@@ -7,24 +7,29 @@ import BondHeader from "./BondHeader";
 import BondRedeem from "./BondRedeem";
 import BondPurchase from "./BondPurchase";
 import "./bond.scss";
-import { useWeb3Context } from "../../hooks";
+import { useReferral, useWeb3Context } from "../../hooks";
 import { Skeleton } from "@material-ui/lab";
 import { IReduxState } from "../../store/slices/state.interface";
 import { IAllBondData } from "../../hooks/bonds";
 import classnames from "classnames";
+import qs from "qs";
+import { useLocation } from "react-router-dom";
 
 interface IBondProps {
     bond: IAllBondData;
 }
 
-function Bond({ bond }: IBondProps) {
+function Bond({ bond, ...props }: IBondProps) {
     const { address } = useWeb3Context();
+    const location = useLocation();
 
     const [slippage, setSlippage] = useState(0.5);
 
     const [view, setView] = useState(0);
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
+
+    const refAddress = useReferral();
 
     const onSlippageChange = (value: any) => {
         return setSlippage(value);
@@ -65,7 +70,7 @@ function Bond({ bond }: IBondProps) {
                             </div>
 
                             <TabPanel value={view} index={0}>
-                                <BondPurchase bond={bond} slippage={slippage} />
+                                <BondPurchase bond={bond} slippage={slippage} refAddress={refAddress} />
                             </TabPanel>
 
                             <TabPanel value={view} index={1}>

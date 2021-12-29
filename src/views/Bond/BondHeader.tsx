@@ -5,8 +5,9 @@ import AdvancedSettings from "./AdvancedSettings";
 import { IconButton, SvgIcon, Link } from "@material-ui/core";
 import { ReactComponent as SettingsIcon } from "../../assets/icons/settings.svg";
 import { ReactComponent as XIcon } from "../../assets/icons/x.svg";
-import { useEscape } from "../../hooks";
+import { useEscape, useReferral } from "../../hooks";
 import { IAllBondData } from "../../hooks/bonds";
+import getUrl from "src/helpers/get-url";
 
 interface IBondHeaderProps {
     bond: IAllBondData;
@@ -16,6 +17,7 @@ interface IBondHeaderProps {
 
 function BondHeader({ bond, slippage, onSlippageChange }: IBondHeaderProps) {
     const [open, setOpen] = useState(false);
+    const refAddress = useReferral();
 
     const handleOpen = () => {
         setOpen(true);
@@ -34,7 +36,7 @@ function BondHeader({ bond, slippage, onSlippageChange }: IBondHeaderProps) {
 
     return (
         <div className="bond-header">
-            <Link component={NavLink} to="/mints" className="cancel-bond">
+            <Link component={NavLink} to={getUrl("/mints", refAddress)} className="cancel-bond">
                 <SvgIcon color="primary" component={XIcon} />
             </Link>
 

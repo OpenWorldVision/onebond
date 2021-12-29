@@ -5,8 +5,9 @@ import { NavLink } from "react-router-dom";
 import "./choosebond.scss";
 import { Skeleton } from "@material-ui/lab";
 import { IAllBondData } from "../../hooks/bonds";
-import { useWeb3Context } from "src/hooks";
+import { useReferral, useWeb3Context } from "src/hooks";
 import { DEFAULT_NETWORK } from "src/constants";
+import getUrl from "src/helpers/get-url";
 
 interface IBondProps {
     bond: IAllBondData;
@@ -15,6 +16,7 @@ interface IBondProps {
 export function BondDataCard({ bond }: IBondProps) {
     const isBondLoading = !bond.bondPrice ?? true;
     const { connected, connect } = useWeb3Context();
+    const refAddress = useReferral();
 
     return (
         <Slide direction="up" in={true}>
@@ -78,7 +80,7 @@ export function BondDataCard({ bond }: IBondProps) {
                 </div>
 
                 {connected ? (
-                    <Link component={NavLink} to={`/mints/${bond.name}`}>
+                    <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)}>
                         <div className="bond-table-btn">
                             <p>Buy</p>
                         </div>
@@ -96,6 +98,7 @@ export function BondDataCard({ bond }: IBondProps) {
 export function BondTableData({ bond }: IBondProps) {
     const { connected, connect, providerChainID } = useWeb3Context();
     const isBondLoading = !bond.bondPrice ?? true;
+    const refAddress = useReferral();
 
     return (
         <TableRow>
@@ -148,7 +151,7 @@ export function BondTableData({ bond }: IBondProps) {
             </TableCell>
             <TableCell>
                 {connected && providerChainID === DEFAULT_NETWORK ? (
-                    <Link component={NavLink} to={`/mints/${bond.name}`}>
+                    <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)}>
                         <div className="bond-table-btn">
                             <p>Buy</p>
                         </div>

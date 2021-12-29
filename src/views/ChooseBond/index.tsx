@@ -1,16 +1,35 @@
-import { useSelector } from "react-redux";
-import { Paper, Grid, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Zoom } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Zoom, IconButton, OutlinedInput, Typography, Container } from "@material-ui/core";
 import { BondTableData, BondDataCard } from "./BondRow";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { trim } from "../../helpers";
 import useBonds from "../../hooks/bonds";
 import "./choosebond.scss";
-import { Skeleton } from "@material-ui/lab";
 import { IReduxState } from "../../store/slices/state.interface";
+import { FileCopyOutlined } from "@material-ui/icons";
+import { useCallback } from "react";
+import { useWeb3Context } from "src/hooks";
+import { withStyles } from "@material-ui/styles";
+import { success } from "src/store/slices/messages-slice";
+
+const CssTextField = withStyles({
+    root: {
+        color: "#FFF",
+        borderColor: "#FFF",
+
+        "& .MuiOutlinedInput-root": {
+            "&:disable": {
+                borderColor: "#FFF",
+            },
+        },
+    },
+})(OutlinedInput);
 
 function ChooseBond() {
+    const { address } = useWeb3Context();
     const { bonds } = useBonds();
     const isSmallScreen = useMediaQuery("(max-width: 733px)"); // change to breakpoint query
+
+    const dispatch = useDispatch();
 
     const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
     const marketPrice = useSelector<IReduxState, number>(state => {
@@ -20,6 +39,12 @@ function ChooseBond() {
     const treasuryBalance = useSelector<IReduxState, number>(state => {
         return state.app.treasuryBalance;
     });
+
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(`https://bond.cryptowar.network/#/mints/?r=${address}`);
+
+        dispatch(success({ text: `Copied referral link: https://bond.cryptowar.network/#/mints/?r=${address}` }));
+    }, [address]);
 
     return (
         <div className="choose-bond-view">
@@ -91,7 +116,23 @@ function ChooseBond() {
                     )}
                 </div>
             </Zoom>
+            <div className="choose-bond-view-card referral-container">
+                <div className="choose-bond-view-card-header">
+                    <p className="choose-bond-view-card-title">Referral</p>
+                </div>
+                <div className="choose-bond-view-card-header">
+                    <p className="choose-bond-view-card-subtitle"> 1% bonus to you when refer your friends</p>
+                </div>
 
+                <div className="referral-input">
+                    <Container>
+                        <Typography>{`https://bond.cryptowar.network/#/mints/?r=${address}`}</Typography>
+                        <IconButton onClick={handleCopy} className="copy-button">
+                            <FileCopyOutlined />
+                        </IconButton>
+                    </Container>
+                </div>
+            </div>
             {isSmallScreen && (
                 <div className="choose-bond-view-card-container">
                     <Grid container item spacing={2}>

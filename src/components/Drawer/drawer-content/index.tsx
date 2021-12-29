@@ -6,7 +6,7 @@ import BondIcon from "../../../assets/icons/bond.svg";
 import WonderlandIcon from "../../../assets/icons/xBlade-logo.png";
 import DashboardIcon from "../../../assets/icons/dashboard.svg";
 import { trim, shorten } from "../../../helpers";
-import { useAddress } from "../../../hooks";
+import { useAddress, useReferral } from "../../../hooks";
 import useBonds from "../../../hooks/bonds";
 import { Link } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
@@ -14,11 +14,13 @@ import "./drawer-content.scss";
 import DocsIcon from "../../../assets/icons/stake.svg";
 import GlobeIcon from "../../../assets/icons/wonderglobe.svg";
 import classnames from "classnames";
+import getUrl from "src/helpers/get-url";
 
 function NavContent() {
     const [isActive] = useState();
     const address = useAddress();
     const { bonds } = useBonds();
+    const refAddress = useReferral();
 
     const checkPage = useCallback((location: any, page: string): boolean => {
         const currentPath = location.pathname.replace("/", "");
@@ -101,7 +103,7 @@ function NavContent() {
                     <div className="bond-discounts">
                         <p>Discounts</p>
                         {bonds.map((bond, i) => (
-                            <Link component={NavLink} to={`/mints/${bond.name}`} key={i} className={"bond"}>
+                            <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)} key={i} className={"bond"}>
                                 {!bond.bondDiscount ? (
                                     <Skeleton variant="text" width={"150px"} />
                                 ) : (

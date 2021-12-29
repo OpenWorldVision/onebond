@@ -15,11 +15,11 @@ function Main() {
                         <p>Enter App</p>
                     </div>
                 </Link>
-                <Link href="https://wonderland.gitbook.io/wonderland/" target="_blank" rel="noreferrer">
+                {/* <Link href="https://wonderland.gitbook.io/wonderland/" target="_blank" rel="noreferrer">
                     <div className="landing-main-btn">
                         <p>Documentation</p>
                     </div>
-                </Link>
+                </Link> */}
             </div>
             <div className="landing-main-title-wrap">
                 <p>The Defi</p>
