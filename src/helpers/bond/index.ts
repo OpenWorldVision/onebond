@@ -6,6 +6,7 @@ import AvaxIcon from "../../assets/tokens/AVAX.svg";
 import MimTimeIcon from "../../assets/tokens/TIME-MIM.svg";
 import BnbIcon from "../../assets/tokens/BNB.png";
 import BusdIcon from "../../assets/tokens/BUSD.svg";
+import XbladeIcon from "../../assets/tokens/XBLADE.png";
 
 import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract } from "../../abi";
 
@@ -70,8 +71,8 @@ export const busd = new CustomBond({
 });
 
 export const busd30 = new CustomBond({
-    name: "busd-30",
-    displayName: "BUSD - 30 days",
+    name: "busd-45",
+    displayName: "BUSD - 45 days",
     bondToken: "BUSD",
     bondIconSvg: BusdIcon,
     bondContractABI: StableBondContract,
@@ -83,6 +84,46 @@ export const busd30 = new CustomBond({
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0x050ecA1D00ff0cf565796a393d5152886fe9D272",
+            reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        },
+    },
+    tokensInStrategy: "756916000000000000000000",
+});
+
+export const busd45 = new CustomBond({
+    name: "busd-45",
+    displayName: "BUSD - 45 days",
+    bondToken: "BUSD",
+    bondIconSvg: BusdIcon,
+    bondContractABI: StableBondContract,
+    reserveContractAbi: StableReserveContract,
+    networkAddrs: {
+        [Networks.AVAX]: {
+            bondAddress: "0xffFF6347040CA37A5E6D17C07705325C69A63D7B",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.BSC_MAINNET]: {
+            bondAddress: "0x1406Ca4E936fF6C2E5E9Cf6a13F19A7048d9B09e",
+            reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        },
+    },
+    tokensInStrategy: "756916000000000000000000",
+});
+
+export const xblade = new CustomBond({
+    name: "xblade-180",
+    displayName: "xBlade - 180 days",
+    bondToken: "xBlade",
+    bondIconSvg: XbladeIcon,
+    bondContractABI: StableBondContract,
+    reserveContractAbi: StableReserveContract,
+    networkAddrs: {
+        [Networks.AVAX]: {
+            bondAddress: "0x88B69F934ce1b574664fF245D30f9FF829605BCa",
+            reserveAddress: "0x28ad774c41c229d48a441b280cbf7b5c5f1fed2b",
+        },
+        [Networks.BSC_MAINNET]: {
+            bondAddress: "",
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
     },

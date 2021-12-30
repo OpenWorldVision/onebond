@@ -1,5 +1,5 @@
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
-const XBladeBond30Depository = artifacts.require("XBladeBond30Depository");
+const XBladeBond45Depository = artifacts.require("XBladeBond45Depository");
 
 module.exports = async function (deployer, network) {
     let token = "";
@@ -28,7 +28,7 @@ module.exports = async function (deployer, network) {
         DAOAddress = "0x106aFc0fCa1592F964a6e216d016b3dF45CDB4e6";
     }
     const xBladeBond = await deployProxy(
-        XBladeBond30Depository,
+        XBladeBond45Depository,
         [
             token, // xBlade (receive token)
             BUSD, // Token to buy xBlade
@@ -37,12 +37,10 @@ module.exports = async function (deployer, network) {
             pancakeAggregator, // Price feed from Pancake,
             pancakeRouter,
         ],
-        { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
+        { deployer, initializer: "initialize", unsafeAllow: ["delegatecall"] },
     );
 
-    const xBladeBond = await XBladeBond30Depository.at("0x050ecA1D00ff0cf565796a393d5152886fe9D272");
-
-    const minimumTerm = "2592000"; // 30 days
+    const minimumTerm = "3888000"; // 45 days
     const minimumPrice = "25000000000000000"; // 0.025 USD
     const maxPayout = 28; // 0.028%
     const discount = 250; // 25%
@@ -50,6 +48,6 @@ module.exports = async function (deployer, network) {
     await xBladeBond.setBondTerms(0, minimumTerm);
     await xBladeBond.initializeBondTerms(minimumPrice, maxPayout, minimumTerm, discount);
 
-    const currentSale = "28000000000000000000000";
+    const currentSale = "30000000000000000000000";
     await xBladeBond.setCurrentSale(currentSale);
 };

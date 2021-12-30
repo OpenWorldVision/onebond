@@ -74,7 +74,7 @@ export function BondDataCard({ bond }: IBondProps) {
                             new Intl.NumberFormat("en-US", {
                                 maximumFractionDigits: 0,
                                 minimumFractionDigits: 0,
-                            }).format(bond.available)
+                            }).format(bond.available > 10 ? bond.available : 0)
                         )}
                     </p>
                 </div>
@@ -145,17 +145,23 @@ export function BondTableData({ bond }: IBondProps) {
                         new Intl.NumberFormat("en-US", {
                             maximumFractionDigits: 0,
                             minimumFractionDigits: 0,
-                        }).format(bond.available)
+                        }).format(bond.available > 10 ? bond.available : 0)
                     )}
                 </p>
             </TableCell>
             <TableCell>
                 {connected && providerChainID === DEFAULT_NETWORK ? (
-                    <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)}>
+                    bond.available > 10 ? (
+                        <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)}>
+                            <div className="bond-table-btn">
+                                <p>Buy</p>
+                            </div>
+                        </Link>
+                    ) : (
                         <div className="bond-table-btn">
-                            <p>Buy</p>
+                            <p>Sold Out</p>
                         </div>
-                    </Link>
+                    )
                 ) : (
                     <div className="bond-table-btn" onClick={connect}>
                         <p>{connected ? "Wrong Network" : "Connect Wallet"}</p>
