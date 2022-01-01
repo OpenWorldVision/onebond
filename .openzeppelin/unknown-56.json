@@ -552,6 +552,181 @@
           }
         }
       }
+    },
+    "8d30dbf2b267a82581477367cc2f1346cbaa3c7aeded0e6bbc3910071f203eb7": {
+      "address": "0x5fe37fbFB7Db0045BCb623f404631432a7522F76",
+      "txHash": "0x169abb05f3ecf2e1a2ff2b559c350786d63ad8c87b4f486ec1629aa48d59bbea",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "xBlade",
+            "type": "t_address",
+            "src": "xBladeBond180Depository.sol:55"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "principle",
+            "type": "t_address",
+            "src": "xBladeBond180Depository.sol:56"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "treasury",
+            "type": "t_address",
+            "src": "xBladeBond180Depository.sol:57"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "DAO",
+            "type": "t_address",
+            "src": "xBladeBond180Depository.sol:58"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "priceFeed",
+            "type": "t_contract(AggregatorV3Interface)2936",
+            "src": "xBladeBond180Depository.sol:60"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "terms",
+            "type": "t_struct(Terms)3061_storage",
+            "src": "xBladeBond180Depository.sol:62"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "bondInfo",
+            "type": "t_mapping(t_address,t_struct(Bond)3070_storage)",
+            "src": "xBladeBond180Depository.sol:64"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "pancakeRouter",
+            "type": "t_contract(IPancakeRouter02)2468",
+            "src": "xBladeBond180Depository.sol:66"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "totalPurchased",
+            "type": "t_uint256",
+            "src": "xBladeBond180Depository.sol:68"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "currentSale",
+            "type": "t_uint256",
+            "src": "xBladeBond180Depository.sol:69"
+          },
+          {
+            "contract": "xBladeBond180Depository",
+            "label": "referralBonusRate",
+            "type": "t_uint256",
+            "src": "xBladeBond180Depository.sol:71"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(AggregatorV3Interface)2936": {
+            "label": "contract AggregatorV3Interface"
+          },
+          "t_struct(Terms)3061_storage": {
+            "label": "struct xBladeBond180Depository.Terms",
+            "members": [
+              {
+                "label": "minimumPrice",
+                "type": "t_uint256"
+              },
+              {
+                "label": "maxPayout",
+                "type": "t_uint256"
+              },
+              {
+                "label": "vestingTerm",
+                "type": "t_uint32"
+              },
+              {
+                "label": "discountRate",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_address,t_struct(Bond)3070_storage)": {
+            "label": "mapping(address => struct xBladeBond180Depository.Bond)"
+          },
+          "t_struct(Bond)3070_storage": {
+            "label": "struct xBladeBond180Depository.Bond",
+            "members": [
+              {
+                "label": "payout",
+                "type": "t_uint256"
+              },
+              {
+                "label": "pricePaid",
+                "type": "t_uint256"
+              },
+              {
+                "label": "vesting",
+                "type": "t_uint32"
+              },
+              {
+                "label": "lastTime",
+                "type": "t_uint32"
+              }
+            ]
+          },
+          "t_contract(IPancakeRouter02)2468": {
+            "label": "contract IPancakeRouter02"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
     }
   }
 }

@@ -7,12 +7,12 @@ module.exports = async function (deployer, network) {
         proxyAddress = "0x2CC6D07871A1c0655d6A7c9b0Ad24bED8f940517";
     }
     if (network === "bscmainnet") {
-        proxyAddress = "";
+        proxyAddress = "0x80EB989BB8D2735fA329797503476aCee6c4EAB2";
     }
     await upgradeProxy(
         proxyAddress,
         xBladeBond180Depository,
 
-        { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
+        { deployer, initializer: "initialize", unsafeAllow: ["delegatecall"] },
     );
 };

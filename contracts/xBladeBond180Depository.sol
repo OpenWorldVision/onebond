@@ -300,7 +300,7 @@ contract xBladeBond180Depository is Initializable, OwnableUpgradeable {
     function distributeReferral(address _referrer, uint256 _value) internal {
         if (_referrer != address(0)) {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
-            uint256 payout = FixedPoint.fraction(_refValue, assetPrice()).decode112with18(); // payout to referrer is computed
+            uint256 payout = _refValue; // payout to referrer is computed
             IERC20(xBlade).safeTransfer(_referrer, payout);
         }
     }
