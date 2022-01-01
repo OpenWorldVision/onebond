@@ -65,7 +65,6 @@ contract xBladeBond180Depository is Initializable, OwnableUpgradeable {
 
     IPancakeRouter02 public pancakeRouter;
 
-    uint256 public lastBuyBack;
     uint256 public totalPurchased;
     uint256 public currentSale;
 
@@ -295,27 +294,6 @@ contract xBladeBond180Depository is Initializable, OwnableUpgradeable {
     }
 
     /**
-     * @notice increase liquidity
-     */
-    function liquidify(uint256 _value) internal {
-        if (_value > 0) {
-            if (IERC20(xBlade).allowance(address(this), address(pancakeRouter)) == 0) {
-                IERC20(xBlade).approve(address(pancakeRouter), ~uint256(0));
-            }
-
-            if (IERC20(principle).allowance(address(this), address(pancakeRouter)) == 0) {
-                IERC20(principle).approve(address(pancakeRouter), ~uint256(0));
-            }
-
-            uint256 oldBalance = IERC20(xBlade).balanceOf(address(this));
-            swap(_value.div(2), address(this));
-            uint256 newBalance = IERC20(xBlade).balanceOf(address(this));
-
-            pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value.div(2), 0, 0, treasury, block.timestamp + 360);
-        }
-    }
-
-    /**
      * @notice distribute referral
      */
 
@@ -324,23 +302,6 @@ contract xBladeBond180Depository is Initializable, OwnableUpgradeable {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
             uint256 payout = FixedPoint.fraction(_refValue, assetPrice()).decode112with18(); // payout to referrer is computed
             IERC20(xBlade).safeTransfer(_referrer, payout);
-        }
-    }
-
-    /**
-     * @notice buy back to treasury
-     */
-    function buyBack(uint256 _value) internal {
-        // buy back every 8 hours
-        if (block.timestamp.sub(lastBuyBack) > 28800) {
-            lastBuyBack = block.timestamp;
-            // if _value > 100 busd swap 1%
-            if (_value > 1e20) {
-                swap(_value.div(100), treasury);
-            }
-            if (_value <= 1e20) {
-                swap(_value, treasury);
-            }
         }
     }
 

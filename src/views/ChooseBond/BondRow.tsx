@@ -18,6 +18,7 @@ export function BondDataCard({ bond }: IBondProps) {
     const { connected, connect } = useWeb3Context();
     const refAddress = useReferral();
 
+    const purchased = bond.name === "xblade-180" ? bond.purchased * bond.marketPrice : bond.purchased;
     return (
         <Slide direction="up" in={true}>
             <Paper className="bond-data-card">
@@ -60,7 +61,7 @@ export function BondDataCard({ bond }: IBondProps) {
                                 currency: "USD",
                                 maximumFractionDigits: 0,
                                 minimumFractionDigits: 0,
-                            }).format(bond.purchased)
+                            }).format(purchased)
                         )}
                     </p>
                 </div>
@@ -99,7 +100,7 @@ export function BondTableData({ bond }: IBondProps) {
     const { connected, connect, providerChainID } = useWeb3Context();
     const isBondLoading = !bond.bondPrice ?? true;
     const refAddress = useReferral();
-
+    const purchased = bond.name === "xblade-180" ? bond.purchased * bond.marketPrice : bond.purchased;
     return (
         <TableRow>
             <TableCell align="left">
@@ -133,7 +134,7 @@ export function BondTableData({ bond }: IBondProps) {
                             currency: "USD",
                             maximumFractionDigits: 0,
                             minimumFractionDigits: 0,
-                        }).format(bond.purchased)
+                        }).format(purchased)
                     )}
                 </p>
             </TableCell>

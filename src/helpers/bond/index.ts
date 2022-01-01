@@ -123,8 +123,8 @@ export const xblade = new CustomBond({
             reserveAddress: "0x28ad774c41c229d48a441b280cbf7b5c5f1fed2b",
         },
         [Networks.BSC_MAINNET]: {
-            bondAddress: "",
-            reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+            bondAddress: "0x80EB989BB8D2735fA329797503476aCee6c4EAB2",
+            reserveAddress: "0x27a339d9B59b21390d7209b78a839868E319301B",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -166,4 +166,4 @@ export const xbladeBUSD = new LPBond({
 //     lpUrl: "https://www.traderjoexyz.com/#/pool/AVAX/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 // });
 
-export default [busd, busd30];
+export default [busd, busd30, xblade];
