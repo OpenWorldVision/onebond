@@ -71,8 +71,8 @@ export const busd = new CustomBond({
 });
 
 export const busd30 = new CustomBond({
-    name: "busd-45",
-    displayName: "BUSD - 45 days",
+    name: "busd-50",
+    displayName: "BUSD - 50 days",
     bondToken: "BUSD",
     bondIconSvg: BusdIcon,
     bondContractABI: StableBondContract,
@@ -111,8 +111,8 @@ export const busd45 = new CustomBond({
 });
 
 export const xblade = new CustomBond({
-    name: "xblade-180",
-    displayName: "xBlade - 180 days",
+    name: "xblade-200",
+    displayName: "xBlade - 200 days",
     bondToken: "xBlade",
     bondIconSvg: XbladeIcon,
     bondContractABI: StableBondContract,
