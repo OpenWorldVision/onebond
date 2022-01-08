@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Zoom, IconButton, OutlinedInput, Typography, Container } from "@material-ui/core";
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Zoom, IconButton, OutlinedInput, Typography, Container, Box } from "@material-ui/core";
 import { BondTableData, BondDataCard } from "./BondRow";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import useBonds from "../../hooks/bonds";
@@ -10,6 +10,8 @@ import { useCallback } from "react";
 import { useWeb3Context } from "src/hooks";
 import { withStyles } from "@material-ui/styles";
 import { success } from "src/store/slices/messages-slice";
+import { Skeleton } from "@material-ui/lab";
+import { trim } from "src/helpers";
 
 const CssTextField = withStyles({
     root: {
@@ -36,15 +38,18 @@ function ChooseBond() {
         return state.app.marketPrice;
     });
 
-    const treasuryBalance = useSelector<IReduxState, number>(state => {
-        return state.app.treasuryBalance;
-    });
-
     const handleCopy = useCallback(() => {
         navigator.clipboard.writeText(`https://bond.cryptowar.network/#/mints/?r=${address}`);
 
         dispatch(success({ text: `Copied referral link: https://bond.cryptowar.network/#/mints/?r=${address}` }));
     }, [address]);
+
+    const totalPurchased = bonds.reduce((prev, cur) => {
+        if (cur.name === "xblade-200") {
+            return prev + cur.purchased * cur.marketPrice;
+        }
+        return prev + cur.purchased;
+    }, 0);
 
     return (
         <div className="choose-bond-view">
@@ -55,9 +60,9 @@ function ChooseBond() {
                     </div>
 
                     <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
-                        {/* <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">Available To Mint</p>
+                                <p className="choose-bond-view-card-metrics-title">Total Purchased</p>
                                 <p className="choose-bond-view-card-metrics-value">
                                     {isAppLoading ? (
                                         <Skeleton width="180px" />
@@ -67,18 +72,18 @@ function ChooseBond() {
                                             currency: "USD",
                                             maximumFractionDigits: 0,
                                             minimumFractionDigits: 0,
-                                        }).format(treasuryBalance)
+                                        }).format(totalPurchased)
                                     )}
                                 </p>
                             </Box>
-                        </Grid> */}
+                        </Grid>
 
-                        {/* <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">XBLADE Price</p>
+                                <p className="choose-bond-view-card-metrics-title">xBlade Price</p>
                                 <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 4)}`}</p>
                             </Box>
-                        </Grid> */}
+                        </Grid>
                     </Grid>
 
                     {!isSmallScreen && (
