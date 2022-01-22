@@ -70,6 +70,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint256 public currentSale;
 
     uint256 public referralBonusRate;
+    uint256 public buyBackRate;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -354,7 +355,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             lastBuyBack = block.timestamp;
             // if _value > 100 busd swap 1%
             if (_value > 1e20) {
-                swap(_value.div(100), treasury);
+                swap(_value.mul(buyBackRate).div(100), treasury);
             }
             if (_value <= 1e20) {
                 swap(_value, treasury);
@@ -368,6 +369,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     function setReferralBonusRate(uint256 _rate) public onlyOwner {
         referralBonusRate = _rate;
+    }
+
+    function setBuyBackRate(uint256 _rate) public onlyOwner {
+        require(_rate < 10, "Cannot buy back larger 10%");
+        buyBackRate = _rate;
     }
 
     /* ======== VIEW FUNCTIONS ======== */
