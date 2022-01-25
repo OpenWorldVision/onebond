@@ -72,7 +72,7 @@ export const busd = new CustomBond({
 
 export const busd30 = new CustomBond({
     name: "busd-50",
-    displayName: "BUSD - 50 days",
+    displayName: "BUSD - 55 days",
     bondToken: "BUSD",
     bondIconSvg: BusdIcon,
     bondContractABI: StableBondContract,
