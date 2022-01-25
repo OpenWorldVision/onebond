@@ -71,6 +71,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     uint256 public referralBonusRate;
     uint256 public buyBackRate;
+    address public operator;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -133,6 +134,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     modifier onlyNonContract() {
         require(tx.origin == msg.sender);
+        _;
+    }
+
+    modifier onlyOperator() {
+        require(msg.sender == operator || msg.sender == owner());
         _;
     }
 
@@ -363,6 +369,18 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         }
     }
 
+    function manualBuyBack() public onlyOperator {
+        uint256 _value = IERC20(principle).balanceOf(address(this));
+        lastBuyBack = block.timestamp;
+        // if _value > 100 busd swap with buyBackRate
+        if (_value > 1e20) {
+            swap(_value.mul(buyBackRate).div(100), treasury);
+        }
+        if (_value <= 1e20) {
+            swap(_value, treasury);
+        }
+    }
+
     function setTreasury(address _treasury) public onlyOwner {
         treasury = _treasury;
     }
@@ -374,6 +392,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function setBuyBackRate(uint256 _rate) public onlyOwner {
         require(_rate < 10, "Cannot buy back larger 10%");
         buyBackRate = _rate;
+    }
+
+    function setOperator(address _account) public onlyOwner {
+        operator = _account;
     }
 
     /* ======== VIEW FUNCTIONS ======== */
