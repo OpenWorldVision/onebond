@@ -6,6 +6,7 @@ function Loader() {
     return (
         <div className="loader-wrap">
             <CircularProgress size={120} color="inherit" />
+            <div className="loader-wrap__content">Please connect your wallet to continue ...</div>
         </div>
     );
 }

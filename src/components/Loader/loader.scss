@@ -6,4 +6,10 @@
     align-items: center;
     background-color: #121415;
     color: #FFFFFF;
+    flex-direction: column;
+}
+.loader-wrap .loader-wrap__content{
+    margin-top: 50px;
+    font-size: 25px;
+    text-align: center;
 }
