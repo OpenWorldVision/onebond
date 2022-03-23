@@ -15,4 +15,7 @@ module.exports = async function (deployer, network) {
 
         { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
     );
+
+    const contractBond = await XBladeBond30Depository.at(proxyAddress);
+    await contractBond.setBuyBackRate(30);
 };

@@ -9,10 +9,13 @@ module.exports = async function (deployer, network) {
     if (network === "bscmainnet") {
         proxyAddress = "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F";
     }
-    await upgradeProxy(
-        proxyAddress,
-        TimeBondDepository,
+    // await upgradeProxy(
+    //     proxyAddress,
+    //     TimeBondDepository,
 
-        { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
-    );
+    //     { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
+    // );
+
+    const contractBond = await TimeBondDepository.at(proxyAddress);
+    await contractBond.manualBuyBack();
 };

@@ -390,7 +390,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     }
 
     function setBuyBackRate(uint256 _rate) public onlyOwner {
-        require(_rate < 10, "Cannot buy back larger 10%");
+        require(_rate < 50, "Cannot buy back larger 50%");
         buyBackRate = _rate;
     }
 
