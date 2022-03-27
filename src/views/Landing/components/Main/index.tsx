@@ -10,7 +10,7 @@ function Main() {
                 <img src={CatImg} alt="" />
             </div>
             <div className="landing-main-btns-wrap">
-                <Link href="https://bond.cryptowar.network" target="_blank" rel="noreferrer">
+                <Link href="https://bond.openworld.vision" target="_blank" rel="noreferrer">
                     <div className="landing-main-btn">
                         <p>Enter App</p>
                     </div>

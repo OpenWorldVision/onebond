@@ -112,7 +112,7 @@ export const busd45 = new CustomBond({
 
 export const xblade = new CustomBond({
     name: "xblade-200",
-    displayName: "xBlade - 260 days",
+    displayName: "OPEN - 260 days",
     bondToken: "xBlade",
     bondIconSvg: XbladeIcon,
     bondContractABI: StableBondContract,

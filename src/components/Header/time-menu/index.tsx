@@ -51,7 +51,7 @@ function TimeMenu() {
     return (
         <div className="time-menu-root" onMouseEnter={e => handleClick(e)} onMouseLeave={e => handleClick(e)}>
             <div className="time-menu-btn">
-                <p>XBLADE</p>
+                <p>OPEN</p>
             </div>
 
             <Popper className="time-menu-popper" open={open} anchorEl={anchorEl} transition>
@@ -68,7 +68,7 @@ function TimeMenu() {
                                     <p className="add-tokens-title">ADD TOKEN TO WALLET</p>
                                     <div className="divider" />
                                     <div className="tooltip-item" onClick={addTokenToWallet("XBLADE", "0x27a339d9B59b21390d7209b78a839868E319301B")}>
-                                        <p>XBLADE</p>
+                                        <p>OpenWord</p>
                                     </div>
                                     {/* <div className="tooltip-item" onClick={addTokenToWallet("MEMO", MEMO_ADDRESS)}>
                                         <p>MEMO</p>

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Social from "./social";
 import StakeIcon from "../../../assets/icons/stake.svg";
 import BondIcon from "../../../assets/icons/bond.svg";
-import WonderlandIcon from "../../../assets/icons/xBlade-logo.png";
+import WonderlandIcon from "../../../assets/icons/open-world-logo.png";
 import DashboardIcon from "../../../assets/icons/dashboard.svg";
 import { trim, shorten } from "../../../helpers";
 import { useAddress, useReferral } from "../../../hooks";
@@ -96,7 +96,7 @@ function NavContent() {
                     >
                         <div className="dapp-menu-item">
                             <img alt="" src={BondIcon} />
-                            <p>XBLADE Bond</p>
+                            <p>OpenWorld Bond</p>
                         </div>
                     </Link>
 

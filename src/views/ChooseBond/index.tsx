@@ -39,9 +39,9 @@ function ChooseBond() {
     });
 
     const handleCopy = useCallback(() => {
-        navigator.clipboard.writeText(`https://bond.cryptowar.network/#/mints/?r=${address}`);
+        navigator.clipboard.writeText(`https://bond.openworld.vision/#/mints/?r=${address}`);
 
-        dispatch(success({ text: `Copied referral link: https://bond.cryptowar.network/#/mints/?r=${address}` }));
+        dispatch(success({ text: `Copied referral link: https://bond.openworld.vision/#/mints/?r=${address}` }));
     }, [address]);
 
     const totalPurchased = bonds.reduce((prev, cur) => {
@@ -56,7 +56,7 @@ function ChooseBond() {
             <Zoom in={true}>
                 <div className="choose-bond-view-card">
                     <div className="choose-bond-view-card-header">
-                        <p className="choose-bond-view-card-title"> Buy XBLADE (⚔️, ⚔️)</p>
+                        <p className="choose-bond-view-card-title"> Buy OPEN (⚔️, ⚔️)</p>
                     </div>
 
                     <Grid container item xs={12} spacing={2} className="choose-bond-view-card-metrics">
@@ -80,7 +80,7 @@ function ChooseBond() {
 
                         <Grid item xs={12} sm={6}>
                             <Box textAlign="center">
-                                <p className="choose-bond-view-card-metrics-title">xBlade Price</p>
+                                <p className="choose-bond-view-card-metrics-title">OPEN Price</p>
                                 <p className="choose-bond-view-card-metrics-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 4)}`}</p>
                             </Box>
                         </Grid>
@@ -131,7 +131,7 @@ function ChooseBond() {
 
                 <div className="referral-input">
                     <Container>
-                        <Typography>{`https://bond.cryptowar.network/#/mints/?r=${address}`}</Typography>
+                        <Typography>{`https://bond.openworld.vision/#/mints/?r=${address}`}</Typography>
                         <IconButton onClick={handleCopy} className="copy-button">
                             <FileCopyOutlined />
                         </IconButton>

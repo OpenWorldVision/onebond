@@ -217,12 +217,12 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
 
                     <div className="data-row">
                         <p className="bond-balance-title">You Will Get</p>
-                        <p className="price-data bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : `${trim(bond.bondQuote, 4)} xBlade`}</p>
+                        <p className="price-data bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : `${trim(bond.bondQuote, 4)} OPEN`}</p>
                     </div>
 
                     <div className={`data-row`}>
                         <p className="bond-balance-title">Max You Can Buy</p>
-                        <p className="price-data bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : `${trim(bond.maxBondPrice, 4)} xBlade`}</p>
+                        <p className="price-data bond-balance-title">{isBondLoading ? <Skeleton width="100px" /> : `${trim(bond.maxBondPrice, 4)} OPEN`}</p>
                     </div>
 
                     <div className="data-row">
