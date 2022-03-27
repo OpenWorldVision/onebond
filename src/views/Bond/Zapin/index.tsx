@@ -282,7 +282,7 @@ function Zapin({ open, handleClose, bond }: IZapinProps) {
                             </div>
                             <div className="data-row">
                                 <p className="data-row-name">Minimum purchase</p>
-                                <p className="data-row-value">500 XBLADE</p>
+                                <p className="data-row-value">500 OPEN</p>
                             </div>
                         </div>
                     </div>

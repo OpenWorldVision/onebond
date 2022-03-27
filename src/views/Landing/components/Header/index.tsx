@@ -27,15 +27,15 @@ function Header() {
                         {({ TransitionProps }) => (
                             <Fade {...TransitionProps} timeout={200}>
                                 <div className="tooltip">
-                                    <Link className="tooltip-item" href="https://github.com/CryptoWar-Network" target="_blank">
+                                    <Link className="tooltip-item" href="https://github.com/OpenWorldVision" target="_blank">
                                         <SvgIcon color="primary" component={GitHub} />
                                         <p>GitHub</p>
                                     </Link>
-                                    <Link className="tooltip-item" href="https://twitter.com/xbladecryptowar" target="_blank">
+                                    <Link className="tooltip-item" href="https://twitter.com/OpenWorldVision" target="_blank">
                                         <SvgIcon color="primary" component={Twitter} />
                                         <p>Twitter</p>
                                     </Link>
-                                    <Link className="tooltip-item" href="https://t.me/elasticbitcoinxbt" target="_blank">
+                                    <Link className="tooltip-item" href="https://t.me/OpenWorldVision" target="_blank">
                                         <SvgIcon viewBox="0 0 32 32" color="primary" component={Telegram} />
                                         <p>Telegram</p>
                                     </Link>
