@@ -132,7 +132,7 @@ function NavContent() {
                 </div>
             </div>
             <div className="dapp-menu-doc-link">
-                <Link href="https://wiki.cryptowar.network/xblade/bond-sales" target="_blank">
+                <Link href="https://wiki.openworld.vision/open/bond-sales" target="_blank">
                     <img alt="" src={DocsIcon} />
                     <p>Docs</p>
                 </Link>
