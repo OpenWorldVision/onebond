@@ -159,9 +159,11 @@ export function BondTableData({ bond }: IBondProps) {
                             </div>
                         </Link>
                     ) : (
-                        <div className="bond-table-btn">
-                            <p>Sold Out</p>
-                        </div>
+                        <Link component={NavLink} to={getUrl(`/mints/${bond.name}`, refAddress)}>
+                            <div className="bond-table-btn">
+                                <p>Sold Out</p>
+                            </div>
+                        </Link>
                     )
                 ) : (
                     <div className="bond-table-btn" onClick={connect}>
