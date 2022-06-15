@@ -5,4 +5,6 @@ export enum Networks {
     BSC_MAINNET = 56,
 }
 
-export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.BSC_MAINNET : Networks.BSC_MAINNET;
+console.log("hshaha", process.env.NODE_ENV);
+
+export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.BSC_MAINNET : Networks.AVAX;
