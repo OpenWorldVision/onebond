@@ -40,7 +40,7 @@ module.exports = async function (deployer, network) {
         { deployer, initializer: "initialize", unsafeAllow: ["delegatecall"] },
     );
 
-    const minimumTerm = "15552000"; // 45 days
+    const minimumTerm = "22464000"; // 260 days
     const minimumPrice = "30000000000000000"; // 0.03 USD
     const maxPayout = 28; // 0.028%
     const discount = 150; // 15%

@@ -9,13 +9,15 @@ module.exports = async function (deployer, network) {
     let pancakeRouter = "";
     let treasuryAddress = "";
     let DAOAddress = "";
+    let BNBAddress = "";
     if (network === "bsctestnet") {
         token = "0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B"; // xBlade (receive token)
-        pancakeAggregator = "0x89db444c9542f8ea79b944be460b3efa077f5962";
+        pancakeAggregator = "0x70a80FB58d0f91b85b6C668632Fee1E001Bc6b7C";
         BUSD = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
         pancakeRouter = "0x9ac64cc6e4415144c455bd8e4837fea55603e5c3";
         treasuryAddress = "0x14CF6cbBede5107fDD1D99cE9eC075Cb1Fa273c8";
         DAOAddress = "0xc3ba116d38ccac8f9ccb18f20e24fcd3de2f3ea0";
+        BNBAddress = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd";
     }
 
     if (network === "bscmainnet") {
@@ -35,6 +37,7 @@ module.exports = async function (deployer, network) {
             DAOAddress, // Game address to receive bonus from bond
             pancakeAggregator, // Price feed from Pancake,
             pancakeRouter,
+            BNBAddress,
         ],
         { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
     );
