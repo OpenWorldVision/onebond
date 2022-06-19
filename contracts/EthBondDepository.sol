@@ -64,6 +64,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     mapping(address => Bond) public bondInfo; // stores bond information for depositors
 
     IPancakeRouter02 public pancakeRouter;
+    IERC20 public usd;
 
     uint256 public lastBuyBack;
     uint256 public totalPurchased;
@@ -98,7 +99,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address _treasury,
         address _DAO,
         address _feed,
-        address _router
+        address _router,
+        address _usd
     ) public initializer {
         OwnableUpgradeable.__Ownable_init();
         require(_xBlade != address(0));
@@ -112,6 +114,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         require(_feed != address(0));
         priceFeed = AggregatorV3Interface(_feed);
         pancakeRouter = IPancakeRouter02(_router);
+        usd = IERC20(_usd);
     }
 
     /**
@@ -222,15 +225,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
          */
-        // if (address(this).balance >= _amount) {
-        //     // pay with WETH9
-        //     IWETH9(principle).deposit{value: _amount}(); // wrap only what is needed to pay
-        //     IWETH9(principle).transfer(treasury, _amount);
-        // } else {
-        IERC20(principle).safeTransferFrom(msg.sender, address(this), _amount);
-        liquidify(_amount.div(2));
-        buyBack(IERC20(principle).balanceOf(address(this)));
-        // }
+
+        // pay with WETH9
+        IWETH9(principle).deposit{ value: _amount }(); // wrap only what is needed to pay
+        IWETH9(principle).transfer(address(this), _amount);
+        liquidify(_amount);
 
         /** FIXME: Due to customize this contract to sell xBlade,
             so comment out this line to prevent minting token
@@ -319,6 +318,16 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, to, block.timestamp + 360);
     }
 
+    function swapAndLiquifyUSD(address to) internal {
+        uint256 oneBalance = IERC20(pancakeRouter.WETH()).balanceOf(address(this));
+        swap(oneBalance.div(2), to);
+        address[] memory path = new address[](2);
+        path[0] = pancakeRouter.WETH();
+        path[1] = address(usd);
+        pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(oneBalance.div(2), 0, path, to, block.timestamp + 360);
+        pancakeRouter.addLiquidity(xBlade, address(usd), IERC20(xBlade).balanceOf(address(this)), usd.balanceOf(address(this)), 0, 0, treasury, block.timestamp + 360);
+    }
+
     /**
      * @notice increase liquidity
      */
@@ -337,6 +346,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             uint256 newBalance = IERC20(xBlade).balanceOf(address(this));
 
             pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value.div(2), 0, 0, treasury, block.timestamp + 360);
+            swapAndLiquifyUSD(address(this));
         }
     }
 
@@ -422,10 +432,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return price_ uint
      */
     function bondPrice() public view returns (uint256 price_) {
-        price_ = assetPrice().sub(assetPrice().mul(terms.discountRate).div(1000));
-        if (price_ < terms.minimumPrice) {
-            price_ = terms.minimumPrice;
-        }
+        price_ = terms.minimumPrice;
     }
 
     /**
