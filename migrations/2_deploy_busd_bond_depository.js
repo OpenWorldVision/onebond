@@ -42,14 +42,16 @@ module.exports = async function (deployer, network) {
         { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
     );
 
-    const minimumTerm = "157680000"; // 7 days
-    const minimumPrice = "10000000000000000"; // 0.025 USD
+    const minimumTerm = "157680000"; // 5 years
+    const minimumPrice = "10000000000000000"; // 0.01
     const maxPayout = 50; // 0.028%
     const discount = 125; // 12.5%
+
+    //re-deploy
 
     await xBladeBond.setBondTerms(0, minimumTerm);
     await xBladeBond.initializeBondTerms(minimumPrice, maxPayout, minimumTerm, discount);
 
-    const currentSale = "150000000000000000000000"; // 28000 xBlade
+    const currentSale = "150000000000000000000000"; // 50000 OPEN
     await xBladeBond.setCurrentSale(currentSale);
 };
