@@ -49,6 +49,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
             const shouldProceed = window.confirm(messages.existing_mint);
             if (shouldProceed) {
                 const trimBalance = trim(Number(quantity), 10);
+                console.log("1", trimBalance);
 
                 await dispatch(
                     bondAsset({
@@ -108,6 +109,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
     }, [bondDetailsDebounce]);
 
     const onSeekApproval = async () => {
+        console.log("view1");
         if (await checkWrongNetwork()) return;
 
         dispatch(changeApproval({ address, bond, provider, networkID: chainID }));

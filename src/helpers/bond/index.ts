@@ -68,14 +68,14 @@ export const xbn = new CustomBond({
 
 export const busd = new CustomBond({
     name: "busd",
-    displayName: "BUSD - 7 days",
+    displayName: "BUSD - 5 years",
     bondToken: "BUSD",
     bondIconSvg: BusdIcon,
     bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x9C7083dFEa7DC98C5BC64afc9049C40ba87Dd3d0",
+            bondAddress: "0xf6C4491f5d06d73e48e0a50833a5cDf218729C6c",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
@@ -222,4 +222,4 @@ export const xbladeBUSD = new LPBond({
 //     lpUrl: "https://www.traderjoexyz.com/#/pool/AVAX/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 // });
 
-export default [busd, busd30, xblade];
+export default [busd];

@@ -25,7 +25,7 @@ function Bond({ bond, ...props }: IBondProps) {
 
     const [slippage, setSlippage] = useState(0.5);
 
-    const [view, setView] = useState(1);
+    const [view, setView] = useState(0);
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
 
