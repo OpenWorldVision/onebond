@@ -201,7 +201,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _amount,
         uint256 _maxPrice,
         address _depositor
-    ) public onlyNonContract returns (uint256) {
+    ) public payable onlyNonContract returns (uint256) {
         require(_depositor != address(0), "Invalid address");
 
         uint256 priceInUSD = bondPriceInUSD(); // Stored in bond info
@@ -222,7 +222,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
          */
-
+        require(msg.value == _amount, "UA");
         // pay with WETH9
         IWETH9(principle).deposit{ value: _amount }(); // wrap only what is needed to pay
         IWETH9(principle).transfer(address(this), _amount);
