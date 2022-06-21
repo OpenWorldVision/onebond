@@ -98,7 +98,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address _principle,
         address _treasury,
         address _DAO,
-        address _feed,
         address _router,
         address _usd
     ) public initializer {
@@ -111,8 +110,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         treasury = _treasury;
         require(_DAO != address(0));
         DAO = _DAO;
-        require(_feed != address(0));
-        priceFeed = AggregatorV3Interface(_feed);
         pancakeRouter = IPancakeRouter02(_router);
         usd = IERC20(_usd);
     }
@@ -357,7 +354,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function distributeReferral(address _referrer, uint256 _value) internal {
         if (_referrer != address(0)) {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
-            uint256 payout = FixedPoint.fraction(_refValue, assetPrice()).decode112with18(); // payout to referrer is computed
+            uint256 payout = FixedPoint.fraction(_refValue, _bondPrice()).decode112with18(); // payout to referrer is computed
             IERC20(xBlade).safeTransfer(_referrer, payout);
         }
     }
