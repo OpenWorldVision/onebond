@@ -39,8 +39,6 @@ function Bond({ bond, ...props }: IBondProps) {
         setView(newView);
     };
 
-    console.log("bdbdbd", bond);
-
     return (
         <Fade in={true} mountOnEnter unmountOnExit>
             <Grid className="bond-view">
