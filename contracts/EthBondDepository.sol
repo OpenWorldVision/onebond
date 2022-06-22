@@ -209,7 +209,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
         require(_maxPrice >= nativePrice, "Slippage limit: more than max price"); // slippage protection
 
-        uint256 value = _amount;
+        uint256 value = valueOf(_amount);
         uint256 payout = payoutFor(value); // payout to bonder is computed
 
         require(currentSale >= payout, "No more sale token");
@@ -495,6 +495,13 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         } else {
             pendingPayout_ = payout.mul(percentVested).div(10000);
         }
+    }
+
+    function valueOf(uint256 _principleAmount) internal view returns (uint256 _amountOut) {
+        address[] memory path = new address[](2);
+        path[0] = principle;
+        path[1] = address(usd);
+        _amountOut = pancakeRouter.getAmountsOut(_principleAmount, path)[0];
     }
 
     /* ======= AUXILLIARY ======= */
