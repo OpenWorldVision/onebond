@@ -7,6 +7,7 @@ import MimTimeIcon from "../../assets/tokens/TIME-MIM.svg";
 import BnbIcon from "../../assets/tokens/BNB.png";
 import BusdIcon from "../../assets/tokens/BUSD.svg";
 import XbladeIcon from "../../assets/tokens/XBLADE.png";
+import OneIcon from "../../assets/tokens/ONE.png";
 
 import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract, TimeBondContract } from "../../abi";
 export const bnb = new StableBond({
@@ -66,15 +67,15 @@ export const xbn = new CustomBond({
 });
 
 export const busd = new CustomBond({
-    name: "busd",
-    displayName: "BUSD - 5 years",
-    bondToken: "BUSD",
-    bondIconSvg: BusdIcon,
+    name: "one",
+    displayName: "ONE - 5 years",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
     bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0xc87672F7EA384c178ADE7433db99BB11F0511Bf0",
+            bondAddress: "0xFB320DdB24E8Ae270E63cf881C2da19A22F90813",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {

@@ -125,7 +125,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
         setZapinOpen(false);
     };
 
-    const displayUnits = useAvax ? "AVAX" : bond.displayUnits;
+    const displayUnits = useAvax ? "ONE" : bond.displayUnits;
 
     return (
         <Box display="flex" flexDirection="column">
