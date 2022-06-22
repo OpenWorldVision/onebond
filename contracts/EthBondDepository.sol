@@ -256,7 +256,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _maxPrice,
         address _depositor,
         address _referrer
-    ) external onlyNonContract returns (uint256) {
+    ) external payable onlyNonContract returns (uint256) {
         require(_depositor != _referrer && msg.sender != _referrer, "Cannot refer yourself");
         distributeReferral(_referrer, _amount);
         return deposit(_amount, _maxPrice, _depositor);
@@ -321,6 +321,14 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address[] memory path = new address[](2);
         path[0] = pancakeRouter.WETH();
         path[1] = address(usd);
+
+        if (IERC20(pancakeRouter.WETH()).allowance(address(this), address(pancakeRouter)) == 0) {
+            IERC20(pancakeRouter.WETH()).approve(address(pancakeRouter), ~uint256(0));
+        }
+
+        if (IERC20(address(usd)).allowance(address(this), address(pancakeRouter)) == 0) {
+            IERC20(address(usd)).approve(address(pancakeRouter), ~uint256(0));
+        }
         pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(oneBalance.div(2), 0, path, to, block.timestamp + 360);
         pancakeRouter.addLiquidity(xBlade, address(usd), IERC20(xBlade).balanceOf(address(this)), usd.balanceOf(address(this)), 0, 0, treasury, block.timestamp + 360);
     }

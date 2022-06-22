@@ -25,7 +25,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
     const { provider, address, chainID, checkWrongNetwork, connected, connect, providerChainID } = useWeb3Context();
 
     const [quantity, setQuantity] = useState("");
-    const [useAvax, setUseAvax] = useState(false);
+    const [useAvax, setUseAvax] = useState(true);
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
     const [zapinOpen, setZapinOpen] = useState(false);
