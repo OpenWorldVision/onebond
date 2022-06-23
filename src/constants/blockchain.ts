@@ -6,5 +6,6 @@ export enum Networks {
     HARMONY_TESTNET = 1666700000,
     HARMONY = 1666600000,
 }
+//set default testnet for test
 
-export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.BSC_MAINNET : Networks.AVAX;
+export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.AVAX : Networks.AVAX;
