@@ -83,7 +83,7 @@ export const busd = new CustomBond({
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
         [Networks.HARMONY]: {
-            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            bondAddress: "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.HARMONY_TESTNET]: {
