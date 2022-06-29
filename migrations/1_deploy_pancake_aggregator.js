@@ -15,5 +15,10 @@ module.exports = async function (deployer, network) {
         token = "0x27a339d9b59b21390d7209b78a839868e319301b";
         busdAddress = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
     }
+    if (network === "harmonytestnet") {
+        router = "";
+        token = "0x81d46b953ea84204AC1CaB75A4cB188E2529DCFB";
+        busdAddress = "";
+    }
     await deployer.deploy(PancakeAggregator, router, token, busdAddress);
 };

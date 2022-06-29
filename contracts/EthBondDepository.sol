@@ -98,7 +98,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address _principle,
         address _treasury,
         address _DAO,
-        address _feed,
         address _router,
         address _usd
     ) public initializer {
@@ -111,8 +110,6 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         treasury = _treasury;
         require(_DAO != address(0));
         DAO = _DAO;
-        require(_feed != address(0));
-        priceFeed = AggregatorV3Interface(_feed);
         pancakeRouter = IPancakeRouter02(_router);
         usd = IERC20(_usd);
     }
@@ -204,7 +201,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _amount,
         uint256 _maxPrice,
         address _depositor
-    ) public onlyNonContract returns (uint256) {
+    ) public payable onlyNonContract returns (uint256) {
         require(_depositor != address(0), "Invalid address");
 
         uint256 priceInUSD = bondPriceInUSD(); // Stored in bond info
@@ -212,7 +209,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
         require(_maxPrice >= nativePrice, "Slippage limit: more than max price"); // slippage protection
 
-        uint256 value = _amount;
+        uint256 value = valueOf(_amount);
         uint256 payout = payoutFor(value); // payout to bonder is computed
 
         require(currentSale >= payout, "No more sale token");
@@ -225,7 +222,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
          */
-
+        require(msg.value == _amount, "UA");
         // pay with WETH9
         IWETH9(principle).deposit{ value: _amount }(); // wrap only what is needed to pay
         IWETH9(principle).transfer(address(this), _amount);
@@ -259,7 +256,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         uint256 _maxPrice,
         address _depositor,
         address _referrer
-    ) external onlyNonContract returns (uint256) {
+    ) external payable onlyNonContract returns (uint256) {
         require(_depositor != _referrer && msg.sender != _referrer, "Cannot refer yourself");
         distributeReferral(_referrer, _amount);
         return deposit(_amount, _maxPrice, _depositor);
@@ -324,6 +321,14 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         address[] memory path = new address[](2);
         path[0] = pancakeRouter.WETH();
         path[1] = address(usd);
+
+        if (IERC20(pancakeRouter.WETH()).allowance(address(this), address(pancakeRouter)) == 0) {
+            IERC20(pancakeRouter.WETH()).approve(address(pancakeRouter), ~uint256(0));
+        }
+
+        if (IERC20(address(usd)).allowance(address(this), address(pancakeRouter)) == 0) {
+            IERC20(address(usd)).approve(address(pancakeRouter), ~uint256(0));
+        }
         pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(oneBalance.div(2), 0, path, to, block.timestamp + 360);
         pancakeRouter.addLiquidity(xBlade, address(usd), IERC20(xBlade).balanceOf(address(this)), usd.balanceOf(address(this)), 0, 0, treasury, block.timestamp + 360);
     }
@@ -357,7 +362,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function distributeReferral(address _referrer, uint256 _value) internal {
         if (_referrer != address(0)) {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
-            uint256 payout = FixedPoint.fraction(_refValue, assetPrice()).decode112with18(); // payout to referrer is computed
+            uint256 payout = FixedPoint.fraction(_refValue, _bondPrice()).decode112with18(); // payout to referrer is computed
             IERC20(xBlade).safeTransfer(_referrer, payout);
         }
     }
@@ -490,6 +495,13 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         } else {
             pendingPayout_ = payout.mul(percentVested).div(10000);
         }
+    }
+
+    function valueOf(uint256 _principleAmount) internal view returns (uint256 _amountOut) {
+        address[] memory path = new address[](2);
+        path[0] = principle;
+        path[1] = address(usd);
+        _amountOut = pancakeRouter.getAmountsOut(_principleAmount, path)[0];
     }
 
     /* ======= AUXILLIARY ======= */

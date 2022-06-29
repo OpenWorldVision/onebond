@@ -7,9 +7,9 @@ import MimTimeIcon from "../../assets/tokens/TIME-MIM.svg";
 import BnbIcon from "../../assets/tokens/BNB.png";
 import BusdIcon from "../../assets/tokens/BUSD.svg";
 import XbladeIcon from "../../assets/tokens/XBLADE.png";
+import OneIcon from "../../assets/tokens/ONE.png";
 
-import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract } from "../../abi";
-
+import { StableBondContract, LpBondContract, WavaxBondContract, StableReserveContract, LpReserveContract, TimeBondContract } from "../../abi";
 export const bnb = new StableBond({
     name: "bnb",
     displayName: "BNB",
@@ -26,6 +26,14 @@ export const bnb = new StableBond({
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
     },
     tokensInStrategy: "60500000000000000000000000",
 });
@@ -39,32 +47,48 @@ export const xbn = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0xE02B1AA2c4BE73093BE79d763fdFFC0E3cf67318",
-            reserveAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
-            bondAddress: "0xE02B1AA2c4BE73093BE79d763fdFFC0E3cf67318",
-            reserveAddress: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "756916000000000000000000",
 });
 
 export const busd = new CustomBond({
-    name: "busd",
-    displayName: "BUSD - 7 days",
-    bondToken: "BUSD",
-    bondIconSvg: BusdIcon,
-    bondContractABI: StableBondContract,
+    name: "one",
+    displayName: "ONE - 5 years",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
+    bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x89635b79C155aE3A61198Ab194014208F4598c4f",
+            bondAddress: "0xFB320DdB24E8Ae270E63cf881C2da19A22F90813",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F",
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -79,12 +103,20 @@ export const busd30 = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x860bd4B4dB93028bd5000C7eC5f743abEA188296",
+            bondAddress: "0x7Fe98bf70cFF52903634Ea7Dfe8B44F99bB3019C",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0x050ecA1D00ff0cf565796a393d5152886fe9D272",
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -106,6 +138,14 @@ export const busd45 = new CustomBond({
             bondAddress: "0x1406Ca4E936fF6C2E5E9Cf6a13F19A7048d9B09e",
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
     },
     tokensInStrategy: "756916000000000000000000",
 });
@@ -119,12 +159,20 @@ export const xblade = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x88B69F934ce1b574664fF245D30f9FF829605BCa",
+            bondAddress: "0x0504fc7eA78f3EF1Ac2a1b06A92b61111f7b5F2A",
             reserveAddress: "0x28ad774c41c229d48a441b280cbf7b5c5f1fed2b",
         },
         [Networks.BSC_MAINNET]: {
             bondAddress: "0x80EB989BB8D2735fA329797503476aCee6c4EAB2",
             reserveAddress: "0x27a339d9B59b21390d7209b78a839868E319301B",
+        },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
     },
     tokensInStrategy: "756916000000000000000000",
@@ -146,6 +194,14 @@ export const xbladeBUSD = new LPBond({
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
             reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
         },
+        [Networks.HARMONY]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+        [Networks.HARMONY_TESTNET]: {
+            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
+            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
     },
     lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 });
@@ -166,4 +222,4 @@ export const xbladeBUSD = new LPBond({
 //     lpUrl: "https://www.traderjoexyz.com/#/pool/AVAX/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 // });
 
-export default [busd, busd30, xblade];
+export default [busd];

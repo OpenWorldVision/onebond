@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, OutlinedInput, InputAdornment, Slide, FormControl } from "@material-ui/core";
+import { Box, OutlinedInput, InputAdornment, Slide, FormControl, Modal } from "@material-ui/core";
 import { shorten, trim, prettifySeconds } from "../../helpers";
 import { changeApproval, bondAsset, calcBondDetails } from "../../store/slices/bond-slice";
 import { useWeb3Context } from "../../hooks";
@@ -25,10 +25,12 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
     const { provider, address, chainID, checkWrongNetwork, connected, connect, providerChainID } = useWeb3Context();
 
     const [quantity, setQuantity] = useState("");
-    const [useAvax, setUseAvax] = useState(false);
+    const [useAvax, setUseAvax] = useState(true);
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
     const [zapinOpen, setZapinOpen] = useState(false);
+    const [showWarningModal, setShowWarningModal] = useState(false);
+    const [proceed, setProceed] = useState(false);
 
     const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
         return state.pendingTransactions;
@@ -36,6 +38,9 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
 
     const vestingPeriod = () => {
         return prettifySeconds(bond.vestingTerm, "day");
+    };
+    const clearInput = () => {
+        setQuantity("");
     };
 
     async function onBond() {
@@ -46,24 +51,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
         } else if (isNaN(quantity)) {
             dispatch(warning({ text: messages.before_minting }));
         } else if (bond.interestDue > 0 || bond.pendingPayout > 0) {
-            const shouldProceed = window.confirm(messages.existing_mint);
-            if (shouldProceed) {
-                const trimBalance = trim(Number(quantity), 10);
-
-                await dispatch(
-                    bondAsset({
-                        value: trimBalance,
-                        slippage,
-                        bond,
-                        networkID: chainID,
-                        provider,
-                        address,
-                        useAvax,
-                        refAddress,
-                    }),
-                );
-                clearInput();
-            }
+            setShowWarningModal(true);
         } else {
             const trimBalance = trim(Number(quantity), 10);
             await dispatch(
@@ -83,8 +71,19 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
         }
     }
 
-    const clearInput = () => {
-        setQuantity("");
+    const dispatchBond = (trimBalance: any) => {
+        dispatch(
+            bondAsset({
+                value: trimBalance,
+                slippage,
+                bond,
+                networkID: chainID,
+                provider,
+                address,
+                useAvax,
+                refAddress,
+            }),
+        );
     };
 
     const hasAllowance = useCallback(() => {
@@ -123,7 +122,17 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
         setZapinOpen(false);
     };
 
-    const displayUnits = useAvax ? "AVAX" : bond.displayUnits;
+    const closeModal = () => {
+        setShowWarningModal(false);
+    };
+
+    const setProceedStatus = useCallback(() => {
+        setShowWarningModal(false);
+        const trimBalance = trim(Number(quantity), 10);
+        dispatchBond(trimBalance);
+    }, [quantity, dispatchBond, setShowWarningModal]);
+
+    const displayUnits = useAvax ? "ONE" : bond.displayUnits;
 
     return (
         <Box display="flex" flexDirection="column">
@@ -243,6 +252,21 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
                     )}
                 </Box>
             </Slide>
+            <Modal open={showWarningModal} className={"bond-modal"} onClose={closeModal}>
+                <div>
+                    <div className="content-modal">
+                        {messages.existing_mint}
+                        <div className="row-exist">
+                            <div className="exist-button" onClick={closeModal}>
+                                <p>Cancel</p>
+                            </div>
+                            <div className="exist-button-margin" onClick={setProceedStatus}>
+                                <p>Proceed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
             <Zapin open={zapinOpen} handleClose={handleZapinClose} bond={bond} />
         </Box>
     );

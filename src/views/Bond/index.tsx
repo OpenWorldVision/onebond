@@ -25,7 +25,7 @@ function Bond({ bond, ...props }: IBondProps) {
 
     const [slippage, setSlippage] = useState(0.5);
 
-    const [view, setView] = useState(1);
+    const [view, setView] = useState(0);
 
     const isBondLoading = useSelector<IReduxState, boolean>(state => state.bonding.loading ?? true);
 
@@ -51,7 +51,7 @@ function Bond({ bond, ...props }: IBondProps) {
                                 <div className="bond-price-data">
                                     <p className="bond-price-data-title">Sale Price</p>
                                     <p className="bond-price-data-value">
-                                        {isBondLoading ? <Skeleton /> : bond.isLP || bond.name === "wavax" ? `$${trim(bond.bondPrice, 4)}` : `${trim(bond.bondPrice, 4)} BUSD`}
+                                        {isBondLoading ? <Skeleton /> : bond.isLP || bond.name === "one" ? `$${trim(bond.bondPrice, 4)} ONE` : `${trim(bond.bondPrice, 4)} BUSD`}
                                     </p>
                                 </div>
                                 <div className="bond-price-data">

@@ -13,4 +13,6 @@ export interface BondAddresses {
 export interface NetworkAddresses {
     [Networks.AVAX]: BondAddresses;
     [Networks.BSC_MAINNET]: BondAddresses;
+    [Networks.HARMONY]: BondAddresses;
+    [Networks.HARMONY_TESTNET]: BondAddresses;
 }

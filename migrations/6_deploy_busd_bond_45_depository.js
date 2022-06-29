@@ -9,6 +9,7 @@ module.exports = async function (deployer, network) {
     let pancakeRouter = "";
     let treasuryAddress = "";
     let DAOAddress = "";
+    let BNBAddress = "";
     if (network === "bsctestnet") {
         token = "0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B"; // xBlade (receive token)
         router = "0x9ac64cc6e4415144c455bd8e4837fea55603e5c3"; // Pancake Router
@@ -17,6 +18,7 @@ module.exports = async function (deployer, network) {
         pancakeRouter = "0x9ac64cc6e4415144c455bd8e4837fea55603e5c3";
         treasuryAddress = "0x14CF6cbBede5107fDD1D99cE9eC075Cb1Fa273c8";
         DAOAddress = "0xc3ba116d38ccac8f9ccb18f20e24fcd3de2f3ea0";
+        BNBAddress = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd";
     }
 
     if (network === "bscmainnet") {
@@ -36,11 +38,12 @@ module.exports = async function (deployer, network) {
             DAOAddress, // Game address to receive bonus from bond
             pancakeAggregator, // Price feed from Pancake,
             pancakeRouter,
+            BNBAddress,
         ],
         { deployer, initializer: "initialize", unsafeAllow: ["delegatecall"] },
     );
 
-    const minimumTerm = "3888000"; // 45 days
+    const minimumTerm = "4752000"; // 45 days
     const minimumPrice = "25000000000000000"; // 0.025 USD
     const maxPayout = 28; // 0.028%
     const discount = 250; // 25%

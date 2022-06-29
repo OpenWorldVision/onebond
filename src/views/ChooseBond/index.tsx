@@ -66,6 +66,8 @@ function ChooseBond() {
                                 <p className="choose-bond-view-card-metrics-value">
                                     {isAppLoading ? (
                                         <Skeleton width="180px" />
+                                    ) : !totalPurchased ? (
+                                        0
                                     ) : (
                                         new Intl.NumberFormat("en-US", {
                                             style: "currency",
