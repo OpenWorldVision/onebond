@@ -8,4 +8,4 @@ export enum Networks {
 }
 //set default testnet for test
 
-export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.HARMONY : Networks.AVAX;
+export const DEFAULT_NETWORK = process.env.NODE_ENV === "production" ? Networks.HARMONY : Networks.HARMONY;
