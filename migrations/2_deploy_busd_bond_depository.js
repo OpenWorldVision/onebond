@@ -26,11 +26,20 @@ module.exports = async function (deployer, network) {
         DAOAddress = "0x106aFc0fCa1592F964a6e216d016b3dF45CDB4e6";
         usd = "";
     }
+
+    if (network === "harmony") {
+        token = "0x27a339d9b59b21390d7209b78a839868e319301b"; // OPEN (receive token)
+        principle = "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a"; // WONE
+        pancakeRouter = "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506"; // SushiRouter
+        treasuryAddress = "0xa60fb437b969c7e2d8c5927b9dcfe9a3cb597b5b";
+        DAOAddress = "0x106aFc0fCa1592F964a6e216d016b3dF45CDB4e6";
+        usd = "0xFa7191D292d5633f702B0bd7E3E3BcCC0e633200"; // FRAX, a stable token
+    }
     const xBladeBond = await deployProxy(
         TimeBondDepository,
         [
-            token, // xBlade (receive token)
-            principle, // Token to buy xBlade
+            token, // OPEN (receive token)
+            principle, // Token to buy OPEN
             treasuryAddress,
             DAOAddress, // Game address to receive bonus from bond
             pancakeRouter,
