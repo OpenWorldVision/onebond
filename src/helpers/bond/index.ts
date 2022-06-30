@@ -99,7 +99,7 @@ export const one3y = new CustomBond({
     displayName: "ONE - 3 years",
     bondToken: "ONE",
     bondIconSvg: OneIcon,
-    bondContractABI: StableBondContract,
+    bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
@@ -127,7 +127,7 @@ export const one2y = new CustomBond({
     displayName: "ONE - 2 years",
     bondToken: "ONE",
     bondIconSvg: OneIcon,
-    bondContractABI: StableBondContract,
+    bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
@@ -155,7 +155,7 @@ export const one18m = new CustomBond({
     displayName: "ONE - 18 months",
     bondToken: "ONE",
     bondIconSvg: OneIcon,
-    bondContractABI: StableBondContract,
+    bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
@@ -182,7 +182,7 @@ export const one12m = new CustomBond({
     displayName: "ONE - 12 months",
     bondToken: "ONE",
     bondIconSvg: OneIcon,
-    bondContractABI: StableBondContract,
+    bondContractABI: TimeBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {

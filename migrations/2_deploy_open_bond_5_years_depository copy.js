@@ -8,7 +8,7 @@ module.exports = async function (deployer, network) {
     let principle = ""; // WBNB in BSC, WONE in Harmony
     let treasuryAddress = "";
     let DAOAddress = "";
-    let usd = ""; // BUSD in BSC, USDC in Harmony
+    let usd = ""; // BUSD in BSC, FRAX in Harmony
     if (network === "bsctestnet") {
         token = "0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B"; // xBlade (receive token)
         principle = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
@@ -58,6 +58,6 @@ module.exports = async function (deployer, network) {
     await xBladeBond.setBondTerms(0, minimumTerm);
     await xBladeBond.initializeBondTerms(minimumPrice, maxPayout, minimumTerm, discount);
 
-    const currentSale = "150000000000000000000000"; // 50000 OPEN
+    const currentSale = "150000000000000000000000"; // 150000 OPEN
     await xBladeBond.setCurrentSale(currentSale);
 };
