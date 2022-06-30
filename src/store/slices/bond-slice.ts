@@ -142,7 +142,8 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         const maxBondQuote = await bondContract.payoutFor(maxValuation);
         maxBondPriceToken = maxBondPrice / (maxBondQuote * Math.pow(10, -9));
     } else {
-        bondQuote = await bondContract.payoutFor(amountInWei);
+        // To save time to query at initial state
+        bondQuote = amountInWei.toString() !== "0" ? await bondContract.payoutFor(amountInWei) : 0;
         bondQuote = bondQuote / Math.pow(10, 18);
 
         const maxBondQuote = await bondContract.payoutFor(maxBodValue);
