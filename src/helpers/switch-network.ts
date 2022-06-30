@@ -46,7 +46,6 @@ const addChainRequest = () => {
 };
 
 export const switchNetwork = async () => {
-    console.log("call day ha");
     if (window.ethereum) {
         try {
             await switchRequest();
