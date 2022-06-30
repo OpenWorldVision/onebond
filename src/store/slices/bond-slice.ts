@@ -100,7 +100,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     }
 
     const amountInWei = ethers.utils.parseEther(value);
-    console.log("1", amountInWei);
 
     let bondPrice = 0,
         bondDiscount = 0,
@@ -111,14 +110,8 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     const bondContract = bond.getContractForBond(networkID, provider);
     const bondCalcContract = getBondCalculator(networkID, provider);
-    console.log("2", bondContract);
-    console.log("3", bondCalcContract);
-
     const terms = await bondContract.terms();
-    console.log("4", terms);
     const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 18);
-    console.log("5", maxBondPrice);
-
     let marketPrice = await getMarketPrice(networkID, provider);
     marketPrice = (1 / marketPrice) * 1;
 
@@ -127,7 +120,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     try {
         bondPrice = await bondContract.bondPriceInUSD();
-        console.log("7", bondPrice);
 
         if (bond.name === xbladeBUSD.name) {
             const avaxPrice = getTokenPrice("AVAX");
@@ -140,8 +132,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     let maxBondPriceToken = 0;
     const maxBodValue = ethers.utils.parseEther("1");
-    console.log("8", maxBodValue);
-    console.log("9", bond);
 
     if (bond.isLP) {
         valuation = await bondCalcContract.valuation(bond.getAddressForReserve(networkID), amountInWei);
@@ -153,24 +143,18 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         maxBondPriceToken = maxBondPrice / (maxBondQuote * Math.pow(10, -9));
     } else {
         bondQuote = await bondContract.payoutFor(amountInWei);
-
         bondQuote = bondQuote / Math.pow(10, 18);
-        console.log("10", bondQuote);
 
         const maxBondQuote = await bondContract.payoutFor(maxBodValue);
-        console.log("11", maxBondQuote);
         maxBondPriceToken = maxBondPrice / (maxBondQuote * Math.pow(10, -18));
-        console.log("12", maxBondPriceToken);
     }
 
     if (!!value && bondQuote > maxBondPrice) {
         dispatch(error({ text: messages.try_mint_more(maxBondPrice.toFixed(2).toString()) }));
-        console.log("13 error");
     }
 
     // Calculate bonds purchased
     let purchased = await bondContract.totalPurchased();
-    console.log("14", purchased);
 
     if (bond.isLP) {
         const assetAddress = bond.getAddressForReserve(networkID);
@@ -186,10 +170,8 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     } else {
         if (bond.tokensInStrategy) {
             purchased = purchased.toString();
-            console.log("15", purchased);
         }
         purchased = purchased / Math.pow(10, 18);
-        console.log("16", purchased);
 
         // if (bond.name === bnb.name) {
         //     const avaxPrice = getTokenPrice("AVAX");
@@ -200,19 +182,7 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     let available = await bondContract.currentSale();
 
     available = available / Math.pow(10, 18);
-    console.log("17", available);
-    console.log("final", {
-        bond: bond.name,
-        bondDiscount,
-        bondQuote,
-        purchased,
-        vestingTerm: Number(terms.vestingTerm),
-        maxBondPrice,
-        bondPrice: bondPrice / Math.pow(10, 18),
-        marketPrice,
-        maxBondPriceToken,
-        available,
-    });
+
     return {
         bond: bond.name,
         bondDiscount,

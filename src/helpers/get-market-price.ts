@@ -4,7 +4,7 @@ import { xbladeBUSD, busd } from "../helpers/bond";
 import { Networks } from "../constants/blockchain";
 
 export async function getMarketPrice(networkID: Networks, provider: ethers.Signer | ethers.providers.Provider): Promise<number> {
-    const mimTimeAddress = xbladeBUSD.getAddressForReserve(networkID);
+    const mimTimeAddress = busd.getAddressForReserve(networkID);
     const pairContract = new ethers.Contract(mimTimeAddress, LpReserveContract, provider);
     const reserves = await pairContract.getReserves();
     const marketPrice = reserves[0] / reserves[1];
