@@ -58,7 +58,9 @@ function App() {
         loadProvider => {
             dispatch(loadAppDetails({ networkID: chainID, provider: loadProvider }));
             bonds.map(bond => {
+                // setInterval(() => {
                 dispatch(calcBondDetails({ bond, value: null, provider: loadProvider, networkID: chainID }));
+                // }, 2000);
             });
             tokens.map(token => {
                 dispatch(calculateUserTokenDetails({ address: "", token, provider, networkID: chainID }));
