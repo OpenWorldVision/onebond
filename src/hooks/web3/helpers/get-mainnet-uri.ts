@@ -1,5 +1,5 @@
 export const getMainnetURI = (): string => {
-    return "https://api.harmony.one";
+    return "https://api.s0.t.hmny.io/";
 };
 
 export const getTestnetURI = (): string => {

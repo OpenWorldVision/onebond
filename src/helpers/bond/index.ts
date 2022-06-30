@@ -66,7 +66,7 @@ export const xbn = new CustomBond({
     tokensInStrategy: "756916000000000000000000",
 });
 
-export const busd = new CustomBond({
+export const one5y = new CustomBond({
     name: "one",
     displayName: "ONE - 5 years",
     bondToken: "ONE",
@@ -84,7 +84,7 @@ export const busd = new CustomBond({
         },
         [Networks.HARMONY]: {
             bondAddress: "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F",
-            reserveAddress: "0xc5494575709af3c6172e250a119db59feae36d8b",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
         },
         [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
@@ -94,11 +94,11 @@ export const busd = new CustomBond({
     tokensInStrategy: "756916000000000000000000",
 });
 
-export const busd30 = new CustomBond({
-    name: "busd-50",
-    displayName: "BUSD - 55 days",
-    bondToken: "BUSD",
-    bondIconSvg: BusdIcon,
+export const one3y = new CustomBond({
+    name: "one3y",
+    displayName: "ONE - 3 years",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
     bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
@@ -111,8 +111,8 @@ export const busd30 = new CustomBond({
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
         [Networks.HARMONY]: {
-            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
-            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+            bondAddress: "0x3cd17fE894fd57649E2874417dD8f13BD6f5A0EF",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
         },
         [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
@@ -122,11 +122,11 @@ export const busd30 = new CustomBond({
     tokensInStrategy: "756916000000000000000000",
 });
 
-export const busd45 = new CustomBond({
-    name: "busd-45",
-    displayName: "BUSD - 45 days",
-    bondToken: "BUSD",
-    bondIconSvg: BusdIcon,
+export const one2y = new CustomBond({
+    name: "one2y",
+    displayName: "ONE - 2 years",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
     bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
@@ -139,8 +139,8 @@ export const busd45 = new CustomBond({
             reserveAddress: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
         },
         [Networks.HARMONY]: {
-            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
-            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+            bondAddress: "0x9a0B623f8fC2A76D73D5c55b2DB8C04628CeD3D1",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
         },
         [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
@@ -150,11 +150,11 @@ export const busd45 = new CustomBond({
     tokensInStrategy: "756916000000000000000000",
 });
 
-export const xblade = new CustomBond({
-    name: "xblade-200",
-    displayName: "OPEN - 260 days",
-    bondToken: "xBlade",
-    bondIconSvg: XbladeIcon,
+export const one18m = new CustomBond({
+    name: "one18m",
+    displayName: "ONE - 18 months",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
     bondContractABI: StableBondContract,
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
@@ -167,8 +167,35 @@ export const xblade = new CustomBond({
             reserveAddress: "0x27a339d9B59b21390d7209b78a839868E319301B",
         },
         [Networks.HARMONY]: {
+            bondAddress: "0xFc658Da47B952223Fbf2AB0a00dCc609d07a2E32",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
+        },
+        [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+        },
+    },
+    tokensInStrategy: "756916000000000000000000",
+});
+export const one12m = new CustomBond({
+    name: "one12m",
+    displayName: "ONE - 12 months",
+    bondToken: "ONE",
+    bondIconSvg: OneIcon,
+    bondContractABI: StableBondContract,
+    reserveContractAbi: StableReserveContract,
+    networkAddrs: {
+        [Networks.AVAX]: {
+            bondAddress: "0x0504fc7eA78f3EF1Ac2a1b06A92b61111f7b5F2A",
+            reserveAddress: "0x28ad774c41c229d48a441b280cbf7b5c5f1fed2b",
+        },
+        [Networks.BSC_MAINNET]: {
+            bondAddress: "0x80EB989BB8D2735fA329797503476aCee6c4EAB2",
+            reserveAddress: "0x27a339d9B59b21390d7209b78a839868E319301B",
+        },
+        [Networks.HARMONY]: {
+            bondAddress: "0x0fe9b91992B824427EfDDDF92aF304A56E384EAF",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
         },
         [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
@@ -195,8 +222,8 @@ export const xbladeBUSD = new LPBond({
             reserveAddress: "0x0d352ea95cdb52294742a32123f50be474163038",
         },
         [Networks.HARMONY]: {
-            bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
-            reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+            bondAddress: "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F",
+            reserveAddress: "0xc5494575709af3c6172e250A119dB59FEaE36D8b",
         },
         [Networks.HARMONY_TESTNET]: {
             bondAddress: "0x1e77592a14af405475c6eba853d0648E3563c1b8",
@@ -222,4 +249,4 @@ export const xbladeBUSD = new LPBond({
 //     lpUrl: "https://www.traderjoexyz.com/#/pool/AVAX/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",
 // });
 
-export default [busd];
+export default [one5y, one3y, one2y, one18m, one12m];
