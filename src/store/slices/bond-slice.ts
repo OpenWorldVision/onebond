@@ -115,9 +115,6 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     let marketPrice = await getMarketPrice(networkID, provider);
     marketPrice = (1 / marketPrice) * 1;
 
-    // let marketPrice = 0.01;
-    // console.log("6", marketPrice);
-
     try {
         bondPrice = await bondContract.bondPriceInUSD();
 
@@ -209,7 +206,6 @@ interface IBondAsset {
     refAddress: string;
 }
 export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, address, bond, networkID, provider, slippage, useAvax, refAddress }: IBondAsset, { dispatch }) => {
-    console.log("1");
     const depositorAddress = address;
     const acceptedSlippage = slippage / 100 || 0.005;
     const valueInWei = ethers.utils.parseEther(value);
