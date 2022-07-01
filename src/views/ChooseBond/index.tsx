@@ -12,6 +12,7 @@ import { withStyles } from "@material-ui/styles";
 import { success } from "src/store/slices/messages-slice";
 import { Skeleton } from "@material-ui/lab";
 import { trim } from "src/helpers";
+import { isNumber } from "lodash";
 
 const CssTextField = withStyles({
     root: {
