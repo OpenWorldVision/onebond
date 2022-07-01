@@ -1,7 +1,7 @@
 const switchRequest = () => {
     return window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: process.env.NODE_ENV === "production" ? "0x38" : "0x61" }],
+        params: [{ chainId: process.env.NODE_ENV === "production" ? "0x63564c40" : "0x63564c40" }],
     });
 };
 
@@ -28,9 +28,20 @@ const addChainRequest = () => {
             decimals: 18,
         },
     };
+    const harmonyMainnet = {
+        chainId: "0x63564c40",
+        chainName: "Harmony mainnet",
+        rpcUrls: ["https://api.harmony.one"],
+        blockExplorerUrls: ["https://explorer.harmony.one/"],
+        nativeCurrency: {
+            name: "ONE",
+            symbol: "ONE",
+            decimals: 18,
+        },
+    };
     return window.ethereum.request({
         method: "wallet_addEthereumChain",
-        params: [process.env.NODE_ENV === "production" ? mainnetChain : testnetChain],
+        params: [process.env.NODE_ENV === "production" ? harmonyMainnet : harmonyMainnet],
     });
 };
 

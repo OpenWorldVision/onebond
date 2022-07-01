@@ -110,10 +110,8 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
 
     const bondContract = bond.getContractForBond(networkID, provider);
     const bondCalcContract = getBondCalculator(networkID, provider);
-
     const terms = await bondContract.terms();
     const maxBondPrice = (await bondContract.maxPayout()) / Math.pow(10, 18);
-
     let marketPrice = await getMarketPrice(networkID, provider);
     marketPrice = (1 / marketPrice) * 1;
 
@@ -141,7 +139,8 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
         const maxBondQuote = await bondContract.payoutFor(maxValuation);
         maxBondPriceToken = maxBondPrice / (maxBondQuote * Math.pow(10, -9));
     } else {
-        bondQuote = await bondContract.payoutFor(amountInWei);
+        // To save time to query at initial state
+        bondQuote = amountInWei.toString() !== "0" ? await bondContract.payoutFor(amountInWei) : 0;
         bondQuote = bondQuote / Math.pow(10, 18);
 
         const maxBondQuote = await bondContract.payoutFor(maxBodValue);
@@ -179,7 +178,9 @@ export const calcBondDetails = createAsyncThunk("bonding/calcBondDetails", async
     }
 
     let available = await bondContract.currentSale();
+
     available = available / Math.pow(10, 18);
+
     return {
         bond: bond.name,
         bondDiscount,

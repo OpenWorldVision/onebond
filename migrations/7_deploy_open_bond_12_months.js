@@ -8,7 +8,7 @@ module.exports = async function (deployer, network) {
     let principle = ""; // WBNB in BSC, WONE in Harmony
     let treasuryAddress = "";
     let DAOAddress = "";
-    let usd = ""; // BUSD in BSC, USDC in Harmony
+    let usd = ""; // BUSD in BSC, FRAX in Harmony
     if (network === "bsctestnet") {
         token = "0x28ad774C41c229D48a441B280cBf7b5c5F1FED2B"; // xBlade (receive token)
         principle = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
@@ -26,11 +26,20 @@ module.exports = async function (deployer, network) {
         DAOAddress = "0x106aFc0fCa1592F964a6e216d016b3dF45CDB4e6";
         usd = "";
     }
+
+    if (network === "harmony") {
+        token = "0x27a339d9b59b21390d7209b78a839868e319301b"; // OPEN (receive token)
+        principle = "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a"; // WONE
+        pancakeRouter = "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506"; // SushiRouter
+        treasuryAddress = "0xa60fb437b969c7e2d8c5927b9dcfe9a3cb597b5b";
+        DAOAddress = "0x106aFc0fCa1592F964a6e216d016b3dF45CDB4e6";
+        usd = "0xFa7191D292d5633f702B0bd7E3E3BcCC0e633200"; // FRAX, a stable token
+    }
     const xBladeBond = await deployProxy(
         TimeBondDepository,
         [
-            token, // xBlade (receive token)
-            principle, // Token to buy xBlade
+            token, // OPEN (receive token)
+            principle, // Token to buy OPEN
             treasuryAddress,
             DAOAddress, // Game address to receive bonus from bond
             pancakeRouter,
@@ -39,8 +48,8 @@ module.exports = async function (deployer, network) {
         { deployer, initializer: "initialize", unsafeAllow: ["struct-definition", "enum-definition", "delegatecall"] },
     );
 
-    const minimumTerm = "157680000"; // 5 years
-    const minimumPrice = "10000000000000000"; // 0.01
+    const minimumTerm = "31104000"; // 18 months
+    const minimumPrice = "40000000000000000"; // 0.04
     const maxPayout = 50; // 0.028%
     const discount = 125; // 12.5%
 
@@ -49,6 +58,6 @@ module.exports = async function (deployer, network) {
     await xBladeBond.setBondTerms(0, minimumTerm);
     await xBladeBond.initializeBondTerms(minimumPrice, maxPayout, minimumTerm, discount);
 
-    const currentSale = "150000000000000000000000"; // 50000 OPEN
+    const currentSale = "700000000000000000000000"; // 700000 OPEN
     await xBladeBond.setCurrentSale(currentSale);
 };

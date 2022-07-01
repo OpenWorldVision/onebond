@@ -128,6 +128,20 @@ module.exports = {
             skipDryRun: true,
             gasPrice: 60000000000,
         },
+        harmony: {
+            provider: () =>
+                new HDWalletProvider(
+                    hdWalletProviderOptions(process.env.BINANCE_MAINNET_WALLET_PRIVATE_KEY, process.env.BINANCE_MAINNET_WALLET_MNEMONIC, {
+                        providerOrUrl: "https://harmony.public-rpc.com/",
+                    }),
+                ),
+            network_id: 1666600000,
+            timeoutBlocks: 200,
+            confirmations: 2,
+            gas: 8000000, //8000000,
+            skipDryRun: true,
+            gasPrice: 38000000000,
+        },
         // Another network with more advanced options...
         // advanced: {
         // port: 8777,             // Custom port

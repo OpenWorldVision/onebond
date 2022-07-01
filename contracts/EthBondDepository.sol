@@ -209,15 +209,14 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
         require(_maxPrice >= nativePrice, "Slippage limit: more than max price"); // slippage protection
 
-        uint256 value = valueOf(_amount);
-        uint256 payout = payoutFor(value); // payout to bonder is computed
+        uint256 payout = payoutFor(_amount); // payout to bonder is computed
 
         require(currentSale >= payout, "No more sale token");
         require(payout >= 10000000, "Bond too small"); // must be > 0.01 xBlade ( underflow protection )
         require(payout <= maxPayout(), "Bond too large"); // size protection because there is no slippage
 
         currentSale = currentSale.sub(payout);
-        totalPurchased = totalPurchased.add(value);
+        totalPurchased = totalPurchased.add(stableValueOf(_amount));
         /**
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
@@ -429,7 +428,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return uint
      */
     function payoutFor(uint256 _value) public view returns (uint256) {
-        return FixedPoint.fraction(_value, bondPrice()).decode112with18();
+        return FixedPoint.fraction(stableValueOf(_value), bondPrice()).decode112with18();
     }
 
     /**
@@ -497,11 +496,11 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         }
     }
 
-    function valueOf(uint256 _principleAmount) internal view returns (uint256 _amountOut) {
+    function stableValueOf(uint256 _principleAmount) public view returns (uint256 _amountOut) {
         address[] memory path = new address[](2);
         path[0] = principle;
         path[1] = address(usd);
-        _amountOut = pancakeRouter.getAmountsOut(_principleAmount, path)[0];
+        _amountOut = pancakeRouter.getAmountsOut(_principleAmount, path)[1];
     }
 
     /* ======= AUXILLIARY ======= */

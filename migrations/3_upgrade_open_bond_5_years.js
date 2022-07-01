@@ -9,5 +9,8 @@ module.exports = async function (deployer, network) {
     if (network === "bscmainnet") {
         proxyAddress = "0xC3d931aE489F994b54cE953cd6b71ed5D8C01b2F";
     }
+    if (network === "harmony") {
+        proxyAddress = "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F";
+    }
     await upgradeProxy(proxyAddress, TimeBondDepository, { deployer, unsafeAllow: ["delegatecall"] });
 };

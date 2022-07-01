@@ -147,7 +147,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
                 )}
                 <FormControl className="bond-input-wrap" variant="outlined" color="primary" fullWidth>
                     <OutlinedInput
-                        placeholder="Amount"
+                        placeholder="ONE Amount"
                         type="number"
                         value={quantity}
                         onChange={e => setQuantity(e.target.value)}
