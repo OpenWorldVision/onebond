@@ -12,6 +12,7 @@ import { withStyles } from "@material-ui/styles";
 import { success } from "src/store/slices/messages-slice";
 import { Skeleton } from "@material-ui/lab";
 import { trim } from "src/helpers";
+import { isNaN, isNumber } from "lodash";
 
 const CssTextField = withStyles({
     root: {
@@ -48,6 +49,10 @@ function ChooseBond() {
         // if (cur.name === "xblade-200") {
         // return prev + cur.purchased * cur.marketPrice;
         // }
+        console.log("haha", isNumber("cho"));
+        if (!isNumber(cur?.purchased)) {
+            cur.purchased = 0;
+        }
         return prev + cur.purchased;
     }, 0);
 
@@ -64,7 +69,7 @@ function ChooseBond() {
                             <Box textAlign="center">
                                 <p className="choose-bond-view-card-metrics-title">Total Purchased</p>
                                 <p className="choose-bond-view-card-metrics-value">
-                                    {isAppLoading ? <Skeleton width="180px" /> : !totalPurchased ? 0 : `${totalPurchased.toFixed(0)} ONE`}
+                                    {isAppLoading ? <Skeleton width="180px" /> : !isNumber(totalPurchased) ? `0 ONE` : `${totalPurchased.toFixed(0)} ONE`}
                                 </p>
                             </Box>
                         </Grid>
