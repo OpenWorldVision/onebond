@@ -45,9 +45,9 @@ function ChooseBond() {
     }, [address]);
 
     const totalPurchased = bonds.reduce((prev, cur) => {
-        if (cur.name === "xblade-200") {
-            return prev + cur.purchased * cur.marketPrice;
-        }
+        // if (cur.name === "xblade-200") {
+        // return prev + cur.purchased * cur.marketPrice;
+        // }
         return prev + cur.purchased;
     }, 0);
 
@@ -64,18 +64,7 @@ function ChooseBond() {
                             <Box textAlign="center">
                                 <p className="choose-bond-view-card-metrics-title">Total Purchased</p>
                                 <p className="choose-bond-view-card-metrics-value">
-                                    {isAppLoading ? (
-                                        <Skeleton width="180px" />
-                                    ) : !totalPurchased ? (
-                                        0
-                                    ) : (
-                                        new Intl.NumberFormat("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                            maximumFractionDigits: 0,
-                                            minimumFractionDigits: 0,
-                                        }).format(totalPurchased)
-                                    )}
+                                    {isAppLoading ? <Skeleton width="180px" /> : !totalPurchased ? 0 : `${totalPurchased.toFixed(0)} ONE`}
                                 </p>
                             </Box>
                         </Grid>
