@@ -49,7 +49,6 @@ function ChooseBond() {
         // if (cur.name === "xblade-200") {
         // return prev + cur.purchased * cur.marketPrice;
         // }
-        console.log("haha", isNumber("cho"));
         if (!isNumber(cur?.purchased)) {
             cur.purchased = 0;
         }
