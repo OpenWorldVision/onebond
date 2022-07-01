@@ -216,7 +216,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         require(payout <= maxPayout(), "Bond too large"); // size protection because there is no slippage
 
         currentSale = currentSale.sub(payout);
-        totalPurchased = totalPurchased.add(stableValueOf(_amount));
+        totalPurchased = totalPurchased.add(_amount); // We will show total ONE purchase instead of USD
         /**
             asset carries risk and is not minted against
             asset transfered to treasury and rewards minted as payout
