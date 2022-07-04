@@ -243,6 +243,7 @@ export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, a
         dispatch(info({ text: messages.your_balance_updated }));
         return;
     } catch (err: any) {
+        console.log(err);
         return metamaskErrorWrap(err, dispatch);
     } finally {
         if (bondTx) {

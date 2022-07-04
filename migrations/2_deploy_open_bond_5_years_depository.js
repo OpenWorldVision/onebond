@@ -50,7 +50,7 @@ module.exports = async function (deployer, network) {
 
     const minimumTerm = "157680000"; // 5 years
     const minimumPrice = "10000000000000000"; // 0.01
-    const maxPayout = 50; // 0.028%
+    const maxPayout = 100; // 0.028%
     const discount = 125; // 12.5%
 
     //re-deploy

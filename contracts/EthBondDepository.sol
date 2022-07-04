@@ -314,22 +314,20 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_value, 0, path, to, block.timestamp + 360);
     }
 
-    function swapAndLiquifyUSD(address to) internal {
-        uint256 oneBalance = IERC20(pancakeRouter.WETH()).balanceOf(address(this));
-        swap(oneBalance.div(2), to);
+    function swapAndLiquifyUSD(uint256 _amount, address to) internal {
         address[] memory path = new address[](2);
-        path[0] = pancakeRouter.WETH();
+        path[0] = principle;
         path[1] = address(usd);
 
-        if (IERC20(pancakeRouter.WETH()).allowance(address(this), address(pancakeRouter)) == 0) {
-            IERC20(pancakeRouter.WETH()).approve(address(pancakeRouter), ~uint256(0));
+        if (IERC20(principle).allowance(address(this), address(pancakeRouter)) == 0) {
+            IERC20(principle).approve(address(pancakeRouter), ~uint256(0));
         }
 
         if (IERC20(address(usd)).allowance(address(this), address(pancakeRouter)) == 0) {
             IERC20(address(usd)).approve(address(pancakeRouter), ~uint256(0));
         }
-        pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(oneBalance.div(2), 0, path, to, block.timestamp + 360);
-        pancakeRouter.addLiquidity(xBlade, address(usd), IERC20(xBlade).balanceOf(address(this)), usd.balanceOf(address(this)), 0, 0, treasury, block.timestamp + 360);
+        pancakeRouter.swapExactTokensForTokensSupportingFeeOnTransferTokens(_amount, 0, path, to, block.timestamp + 360);
+        pancakeRouter.addLiquidity(xBlade, address(usd), getNeedAmountAddLiquid(_amount), usd.balanceOf(address(this)), 0, 0, treasury, block.timestamp + 360);
     }
 
     /**
@@ -345,12 +343,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
                 IERC20(principle).approve(address(pancakeRouter), ~uint256(0));
             }
 
-            uint256 oldBalance = IERC20(xBlade).balanceOf(address(this));
-            swap(_value.div(2), address(this));
-            uint256 newBalance = IERC20(xBlade).balanceOf(address(this));
+            // Add liquidity 50% WONE
 
-            pancakeRouter.addLiquidity(xBlade, principle, newBalance.sub(oldBalance), _value.div(2), 0, 0, treasury, block.timestamp + 360);
-            swapAndLiquifyUSD(address(this));
+            pancakeRouter.addLiquidity(xBlade, principle, getNeedAmountAddLiquid(_value.div(2)), _value.div(2), 0, 0, treasury, block.timestamp + 360);
+            swapAndLiquifyUSD(_value.div(2), address(this));
         }
     }
 
@@ -420,6 +416,13 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      */
     function maxPayout() public view returns (uint256) {
         return IERC20(xBlade).totalSupply().mul(terms.maxPayout).div(100000);
+    }
+
+    function getNeedAmountAddLiquid(uint256 _amountIn) public view returns (uint256 _amountOut) {
+        address[] memory path = new address[](2);
+        path[0] = principle;
+        path[1] = address(xBlade);
+        _amountOut = pancakeRouter.getAmountsOut(_amountIn, path)[1];
     }
 
     /**
