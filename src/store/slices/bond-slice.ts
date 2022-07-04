@@ -220,7 +220,7 @@ export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, a
         const gasPrice = await getGasPrice(provider);
 
         if (useAvax) {
-            bondTx = await bondContract.deposit(valueInWei, maxPremium, depositorAddress, { value: valueInWei, gasPrice });
+            bondTx = await bondContract.deposit(valueInWei, maxPremium, depositorAddress, { value: valueInWei, gasPrice, gasLimit: "1000000" });
         } else {
             if (refAddress) {
                 bondTx = await bondContract.depositWithReferral(valueInWei, maxPremium, depositorAddress, refAddress, { gasPrice });
@@ -243,6 +243,7 @@ export const bondAsset = createAsyncThunk("bonding/bondAsset", async ({ value, a
         dispatch(info({ text: messages.your_balance_updated }));
         return;
     } catch (err: any) {
+        console.log(err);
         return metamaskErrorWrap(err, dispatch);
     } finally {
         if (bondTx) {

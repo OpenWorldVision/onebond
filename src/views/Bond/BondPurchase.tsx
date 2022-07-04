@@ -45,6 +45,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
 
     async function onBond() {
         if (await checkWrongNetwork()) return;
+        console.log({ quantity });
         if (quantity === "") {
             dispatch(warning({ text: messages.before_minting }));
             //@ts-ignore
@@ -54,6 +55,7 @@ function BondPurchase({ bond, slippage, refAddress }: IBondPurchaseProps) {
             setShowWarningModal(true);
         } else {
             const trimBalance = trim(Number(quantity), 10);
+            console.log({ trimBalance });
             await dispatch(
                 //@ts-ignore
                 bondAsset({
