@@ -58,6 +58,13 @@ function TimeMenu() {
                 {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={200}>
                         <div className="tooltip">
+                            <Link
+                                className="tooltip-item"
+                                href={`https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x27a339d9B59b21390d7209b78a839868E319301B&chainId=1666600000`}
+                                target="_blank"
+                            >
+                                <p>Buy on SushiSwap</p>
+                            </Link>
                             <Link className="tooltip-item" href={`https://pancakeswap.finance/swap?outputCurrency=0x27a339d9B59b21390d7209b78a839868E319301B`} target="_blank">
                                 <p>Buy on PancakeSwap</p>
                             </Link>

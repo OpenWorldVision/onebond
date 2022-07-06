@@ -52,18 +52,7 @@ export function BondDataCard({ bond }: IBondProps) {
 
                 <div className="data-row">
                     <p className="bond-name-title">Purchased</p>
-                    <p className="bond-name-title">
-                        {isBondLoading ? (
-                            <Skeleton width="80px" />
-                        ) : (
-                            new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "USD",
-                                maximumFractionDigits: 0,
-                                minimumFractionDigits: 0,
-                            }).format(purchased)
-                        )}
-                    </p>
+                    <p className="bond-name-title">{isBondLoading ? <Skeleton width="80px" /> : `${purchased.toFixed(0)} ONE`}</p>
                 </div>
 
                 <div className="data-row">
