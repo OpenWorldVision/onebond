@@ -2,7 +2,7 @@ const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 const TimeBondDepository = artifacts.require("TimeBondDepository");
 
 module.exports = async function (deployer, network) {
-    const MAX_AVAILABLE = "5000000000000000000000"; // 5000 OPEN
+    const MAX_AVAILABLE = ["150000000000000000000000", "300000000000000000000000", "500000000000000000000000", "500000000000000000000000", "700000000000000000000000"];
 
     const bonds = [
         "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F",
@@ -15,6 +15,6 @@ module.exports = async function (deployer, network) {
     for (let index = 0; index < bonds.length; index++) {
         const address = bonds[index];
         const openBond = await TimeBondDepository.at(address);
-        await openBond.setCurrentSale(MAX_AVAILABLE);
+        await openBond.setCurrentSale(MAX_AVAILABLE[index]);
     }
 };
