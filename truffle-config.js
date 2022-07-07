@@ -138,9 +138,9 @@ module.exports = {
             network_id: 1666600000,
             timeoutBlocks: 200,
             confirmations: 2,
-            gas: 8000000, //8000000,
+            gas: 3000000, //8000000,
             skipDryRun: true,
-            gasPrice: 38000000000,
+            gasPrice: 150000000000,
         },
         // Another network with more advanced options...
         // advanced: {
