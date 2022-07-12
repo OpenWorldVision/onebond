@@ -15,6 +15,7 @@ module.exports = async function (deployer, network) {
     for (let index = 0; index < bonds.length; index++) {
         const address = bonds[index];
         console.log("Upgrade contract at address ", address, "...");
-        await upgradeProxy(address, TimeBondDepository, { deployer, unsafeAllow: ["delegatecall"] });
+        // const contract = await upgradeProxy(address, TimeBondDepository, { deployer, unsafeAllow: ["delegatecall"] });
+        // await contract.setSalePrice("18500000000000000");
     }
 };
