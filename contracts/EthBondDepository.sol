@@ -73,6 +73,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint256 public referralBonusRate;
     uint256 public buyBackRate;
     address public operator;
+
+    uint256 public salePrice;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -357,7 +359,7 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function distributeReferral(address _referrer, uint256 _value) internal {
         if (_referrer != address(0)) {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
-            uint256 payout = FixedPoint.fraction(_refValue, _bondPrice()).decode112with18(); // payout to referrer is computed
+            uint256 payout = FixedPoint.fraction(stableValueOf(_refValue), _bondPrice()).decode112with18(); // payout to referrer is computed
             IERC20(xBlade).safeTransfer(_referrer, payout);
         }
     }
@@ -406,6 +408,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
 
     function setOperator(address _account) public onlyOwner {
         operator = _account;
+    }
+
+    function setSalePrice(uint256 _salePrice) public onlyOwner {
+        salePrice = _salePrice;
     }
 
     /* ======== VIEW FUNCTIONS ======== */
@@ -500,10 +506,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     }
 
     function stableValueOf(uint256 _principleAmount) public view returns (uint256 _amountOut) {
-        address[] memory path = new address[](2);
-        path[0] = principle;
-        path[1] = address(usd);
-        _amountOut = pancakeRouter.getAmountsOut(_principleAmount, path)[1];
+        // address[] memory path = new address[](2);
+        // path[0] = principle;
+        // path[1] = address(usd);
+        _amountOut = salePrice.mul(_principleAmount).div(1e18);
     }
 
     /* ======= AUXILLIARY ======= */
