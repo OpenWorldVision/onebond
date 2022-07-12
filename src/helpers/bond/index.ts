@@ -75,7 +75,7 @@ export const one5y = new CustomBond({
     reserveContractAbi: StableReserveContract,
     networkAddrs: {
         [Networks.AVAX]: {
-            bondAddress: "0x86df20a29966B61D4DACEd7C4239a7b0c1b26114",
+            bondAddress: "0xDC4DAF1b62a0aA93aAE8ba5DA685d5178E9F19aA",
             reserveAddress: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
         },
         [Networks.BSC_MAINNET]: {

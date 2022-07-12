@@ -73,6 +73,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     uint256 public referralBonusRate;
     uint256 public buyBackRate;
     address public operator;
+
+    uint256 public salePrice;
     /* ======== STRUCTS ======== */
 
     // Info for creating new bonds
@@ -357,7 +359,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
     function distributeReferral(address _referrer, uint256 _value) internal {
         if (_referrer != address(0)) {
             uint256 _refValue = _value.mul(referralBonusRate).div(100);
-            uint256 payout = FixedPoint.fraction(_refValue, _bondPrice()).decode112with18(); // payout to referrer is computed
+            // uint256 payout = FixedPoint.fraction(_refValue, _bondPrice()).decode112with18(); // payout to referrer is computed
+            uint256 payout = _refValue.mul(salePrice).div(1e18);
             IERC20(xBlade).safeTransfer(_referrer, payout);
         }
     }
@@ -408,6 +411,10 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
         operator = _account;
     }
 
+    function setSalePrice(uint256 _salePrice) public onlyOwner {
+        salePrice = _salePrice;
+    }
+
     /* ======== VIEW FUNCTIONS ======== */
 
     /**
@@ -431,7 +438,8 @@ contract TimeBondDepository is Initializable, OwnableUpgradeable {
      *  @return uint
      */
     function payoutFor(uint256 _value) public view returns (uint256) {
-        return FixedPoint.fraction(stableValueOf(_value), bondPrice()).decode112with18();
+        return salePrice.mul(_value).div(1e18);
+        // return FixedPoint.fraction(stableValueOf(_value), bondPrice()).decode112with18();
     }
 
     /**
