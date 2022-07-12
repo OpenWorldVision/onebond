@@ -13,6 +13,6 @@ module.exports = async function (deployer, network) {
     //     proxyAddress = "0x81a527e2f7c681be45cAaDAa8d2B4fB79264526F";
     // }
     // await upgradeProxy(proxyAddress, TimeBondDepository, { deployer, unsafeAllow: ["delegatecall"] });
-    const t = await TimeBondDepository.at("0xDC4DAF1b62a0aA93aAE8ba5DA685d5178E9F19aA");
+    const t = await TimeBondDepository.at("0x1a87659D358EFa85Cf615B8Bc223D4F58113Ec37");
     await t.setSalePrice("18500000000000000");
 };
