@@ -113,23 +113,7 @@ function ChooseBond() {
                     )}
                 </div>
             </Zoom>
-            <div className="choose-bond-view-card referral-container">
-                <div className="choose-bond-view-card-header">
-                    <p className="choose-bond-view-card-title">Referral</p>
-                </div>
-                <div className="choose-bond-view-card-header">
-                    <p className="choose-bond-view-card-subtitle"> 1% bonus to you when refer your friends</p>
-                </div>
 
-                <div className="referral-input">
-                    <Container>
-                        <Typography>{`https://bond.openworld.vision/#/mints/?r=${address}`}</Typography>
-                        <IconButton onClick={handleCopy} className="copy-button">
-                            <FileCopyOutlined />
-                        </IconButton>
-                    </Container>
-                </div>
-            </div>
             {isSmallScreen && (
                 <div className="choose-bond-view-card-container">
                     <Grid container item spacing={2}>
